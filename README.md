@@ -12,13 +12,13 @@ No account or GitHub login is required for local use. Download the installer and
 checksum manifest from the same immutable release, inspect them, then install:
 
 ```sh
-curl -fL --proto '=https' -o obsdog-install.sh https://github.com/obsdoghq/obsdog-releases/releases/download/v0.1.6/install.sh
-curl -fL --proto '=https' -o obsdog-checksums.txt https://github.com/obsdoghq/obsdog-releases/releases/download/v0.1.6/checksums.txt
+curl -fL --proto '=https' -o obsdog-install.sh https://github.com/obsdoghq/obsdog-releases/releases/download/v0.1.8/install.sh
+curl -fL --proto '=https' -o obsdog-checksums.txt https://github.com/obsdoghq/obsdog-releases/releases/download/v0.1.8/checksums.txt
 shasum -a 256 obsdog-install.sh
 # Compare that hash with the install.sh entry in obsdog-checksums.txt.
 less obsdog-install.sh
-sh obsdog-install.sh --version v0.1.6 --dry-run
-sh obsdog-install.sh --version v0.1.6
+sh obsdog-install.sh --version v0.1.8 --dry-run
+sh obsdog-install.sh --version v0.1.8
 export PATH="$HOME/.local/bin:$PATH"
 obsdog --help
 obsdog --licenses
@@ -61,6 +61,17 @@ The public binary uses this repository's releases for updates without a token.
 Development (`odev`) and package-manager installations are not overwritten.
 Users of the earlier private CLI should run this installer once to adopt the
 public update channel. Installation does not migrate or discard Space data.
+
+The actual anonymous v0.1.6-to-v0.1.8 update and preservation of an isolated
+synthetic Space were verified. v0.1.7 is a superseded packaging candidate;
+its unchanged archive is retained for audit and is not recommended.
+
+AI callers should use `--actor-type agent --actor your-agent` on `search`,
+`search open` and `search use`, and the separate `--evaluator-type agent
+--evaluator your-agent` flags on `feedback add`. JSON output alone does not
+identify the caller as an agent. New or repaired project guidance includes these
+options; review `obsdog init --dry-run` before refreshing existing guidance with
+`obsdog init --repair`. See [v0.1.8 release notes](releases/v0.1.8.md).
 
 ## Optional hosted Personal beta
 
