@@ -64,13 +64,16 @@ public update channel. Installation does not migrate or discard Space data.
 
 ## Optional hosted Personal beta
 
-Cloud signup is **not open yet**. Preparation limits are one Personal Space,
+Guarded cloud signup is open for controlled beta testing at
+[ObsDog App](https://app.obsdog.ai). Limits are one Personal Space,
 three active device sessions, 100 MiB retained cloud data and 10,000 new sync
 operations per UTC month, initially up to 100 hosted accounts. History and sync
 copies count toward cloud storage; these are not quotas on local files.
 There is no checkout, hosted AI credit, or automatic paid conversion.
 
-Existing invited users can continue. New organizations, a public TestFlight
+Fresh-account and independent-network acceptance are still in progress; this
+is not a general-availability announcement. Existing users can continue even
+when new signup capacity is paused. New organizations, a public TestFlight
 link and an App Store release are not part of this download. The current status
 is documented at [ObsDog](https://obsdog.ai) and [Docs](https://docs.obsdog.ai).
 
