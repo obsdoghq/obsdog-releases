@@ -19,7 +19,7 @@ obsdog version
 ```
 
 The [official tap](https://github.com/obsdoghq/homebrew-tap) installs the exact
-checksum-pinned v0.1.9 binary and its license notices. If Homebrew requests trust,
+checksum-pinned v0.1.10 binary and its license notices. If Homebrew requests trust,
 review and approve this formula only; whole-tap trust is unnecessary.
 
 ### Standalone installer
@@ -28,8 +28,8 @@ Download the installer and checksum manifest from the same immutable release,
 inspect them, then install:
 
 ```sh
-curl -fL --proto '=https' -o obsdog-install.sh https://github.com/obsdoghq/obsdog-releases/releases/download/v0.1.9/install.sh
-curl -fL --proto '=https' -o obsdog-checksums.txt https://github.com/obsdoghq/obsdog-releases/releases/download/v0.1.9/checksums.txt
+curl -fL --proto '=https' -o obsdog-install.sh https://github.com/obsdoghq/obsdog-releases/releases/download/v0.1.10/install.sh
+curl -fL --proto '=https' -o obsdog-checksums.txt https://github.com/obsdoghq/obsdog-releases/releases/download/v0.1.10/checksums.txt
 shasum -a 256 obsdog-install.sh
 # Compare that hash with the install.sh entry in obsdog-checksums.txt.
 less obsdog-install.sh
@@ -49,9 +49,9 @@ notarization ticket or an independent publisher signature.
 The release includes the binary license, third-party notices, SPDX inventory,
 source revision identifier, and checksum manifest. These terminal CLI archives
 are not the notarized macOS desktop application. Intel macOS, Windows, Linux
-and a public macOS app download are not offered by this release. v0.1.9 keeps
-the v0.1.8 product code and fixes installer/release consistency; experimental
-features are not part of this patch.
+and a public macOS app download are not offered by this release. v0.1.10 keeps
+the v0.1.8/v0.1.9 product code and fixes installation into paths containing
+spaces or shell metacharacters; experimental features are not part of this patch.
 
 ## Start locally
 
@@ -82,7 +82,7 @@ Development (`odev`) and package-manager installations are not overwritten.
 Users of the earlier private CLI should run this installer once to adopt the
 public update channel. Installation does not migrate or discard Space data.
 
-The actual anonymous default v0.1.9 install, v0.1.8-to-v0.1.9 update and
+The actual anonymous default v0.1.10 install (including paths with spaces), v0.1.8-to-v0.1.10 update and
 preservation of an isolated synthetic Space were verified. v0.1.7 is a superseded packaging candidate;
 its unchanged archive is retained for audit and is not recommended.
 
