@@ -19,7 +19,7 @@ obsdog version
 ```
 
 The [official tap](https://github.com/obsdoghq/homebrew-tap) installs the exact
-checksum-pinned v0.1.10 binary and its license notices. If Homebrew requests trust,
+checksum-pinned v0.1.11 binary and its license notices. If Homebrew requests trust,
 review and approve this formula only; whole-tap trust is unnecessary.
 
 ### Standalone installer
@@ -28,8 +28,8 @@ Download the installer and checksum manifest from the same immutable release,
 inspect them, then install:
 
 ```sh
-curl -fL --proto '=https' -o obsdog-install.sh https://github.com/obsdoghq/obsdog-releases/releases/download/v0.1.10/install.sh
-curl -fL --proto '=https' -o obsdog-checksums.txt https://github.com/obsdoghq/obsdog-releases/releases/download/v0.1.10/checksums.txt
+curl -fL --proto '=https' -o obsdog-install.sh https://github.com/obsdoghq/obsdog-releases/releases/download/v0.1.11/install.sh
+curl -fL --proto '=https' -o obsdog-checksums.txt https://github.com/obsdoghq/obsdog-releases/releases/download/v0.1.11/checksums.txt
 shasum -a 256 obsdog-install.sh
 # Compare that hash with the install.sh entry in obsdog-checksums.txt.
 less obsdog-install.sh
@@ -49,23 +49,26 @@ notarization ticket or an independent publisher signature.
 The release includes the binary license, third-party notices, SPDX inventory,
 source revision identifier, and checksum manifest. These terminal CLI archives
 are not the notarized macOS desktop application. Intel macOS, Windows, Linux
-and a public macOS app download are not offered by this release. v0.1.10 keeps
-the v0.1.8/v0.1.9 product code and fixes installation into paths containing
-spaces or shell metacharacters; experimental features are not part of this patch.
+and a public macOS app download are not offered by this release. v0.1.11 adds
+no-init Personal selection and explicit AI authorship without changing the
+v0.1.10 storage schema, search, sync protocol or dependencies.
 
 ## Start locally
 
-From the project whose Markdown you want to manage:
+Use the same Personal knowledge from any directory, with no setup required:
 
 ```sh
-obsdog init
 obsdog document import --file README.md
 obsdog search "installation"
 obsdog wiki serve
 ```
 
-Knowledge lives under `~/.obsdog`; a project's `AGENTS.md` records its Space
-connection. Review the managed section created by `init`. The Wiki uses
+Knowledge lives under `~/.obsdog`. Commands default to Personal; select another
+existing library with `--space <space-id>`. An explicit broken binding fails
+visibly rather than writing elsewhere. If multiple existing libraries make the
+default ambiguous, use `obsdog space default --set <space-id>`. Optional
+`obsdog init --dry-run` previews project guidance without creating a separate
+library for every repository. The Wiki uses
 `http://127.0.0.1:47777` by default. Use `obsdog <command> --help` for options.
 Local usage is not metered and does not require network access.
 
@@ -82,7 +85,7 @@ Development (`odev`) and package-manager installations are not overwritten.
 Users of the earlier private CLI should run this installer once to adopt the
 public update channel. Installation does not migrate or discard Space data.
 
-The actual anonymous default v0.1.10 install (including paths with spaces), v0.1.8-to-v0.1.10 update and
+The actual anonymous default v0.1.11 install (including paths with spaces), v0.1.8-to-v0.1.11 update and
 preservation of an isolated synthetic Space were verified. v0.1.7 is a superseded packaging candidate;
 its unchanged archive is retained for audit and is not recommended.
 
@@ -90,12 +93,12 @@ Use `command -v obsdog` to confirm which installation owns the command. Do not
 install both methods onto your PATH unintentionally. `brew uninstall obsdog`
 removes the Homebrew package, not your `~/.obsdog` knowledge or project bindings.
 
-AI callers should use `--actor-type agent --actor your-agent` on `search`,
-`search open` and `search use`, and the separate `--evaluator-type agent
+AI callers should use `--actor-type agent --actor your-agent` on `document import`,
+`block update`, `search`, `search open` and `search use`, and the separate `--evaluator-type agent
 --evaluator your-agent` flags on `feedback add`. JSON output alone does not
 identify the caller as an agent. New or repaired project guidance includes these
 options; review `obsdog init --dry-run` before refreshing existing guidance with
-`obsdog init --repair`. See [v0.1.8 release notes](releases/v0.1.8.md).
+`obsdog init --repair`. See [v0.1.11 release notes](releases/v0.1.11.md).
 
 ## Optional hosted Personal beta
 
