@@ -10,6 +10,13 @@ fails rather than switching libraries. Stop the foreground server with Ctrl-C.
 entrypoint. Only one service is needed. If port 47777 is occupied, use an explicit
 `--port PORT` or `--port 0`; no silent port hopping. Reuse requires a matching
 Space ID, binary version and release channel. No daemon is installed.
+After upgrading the CLI or Homebrew formula, stop the foreground dashboard,
+rerun `obsdog dashboard serve` with the same Space/port flags, then refresh the
+browser. A browser refresh alone keeps the old server alive. Starting with
+v0.2.7, the dashboard detects a replaced executable on load or when the tab
+returns and shows restart guidance; a new CLI does not silently reuse an older
+listener. It never kills the process holding a port. A pre-v0.2.7 dashboard
+needs one manual restart to gain detection.
 
 ## What the UI shows
 
