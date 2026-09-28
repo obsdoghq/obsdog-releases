@@ -1,0 +1,25 @@
+name: Product idea
+description: Describe a workflow you want ObsDog to support.
+body:
+  - type: markdown
+    attributes:
+      value: Describe the need with invented examples. This is public; do not include confidential knowledge or company infrastructure.
+  - type: textarea
+    id: need
+    attributes:
+      label: What are you trying to do?
+      description: Who would use this, and what currently gets in the way?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Suggested experience or alternatives
+      description: A solution is optional; a clear problem is enough.
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: Privacy check
+      options:
+        - label: This public suggestion contains no private knowledge or identifying details.
+          required: true

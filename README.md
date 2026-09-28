@@ -6,6 +6,15 @@ preserve revision history, and record which retrieved knowledge was useful.
 This repository distributes official binaries and installation documentation.
 It does **not** contain the proprietary application source code.
 
+[Send feedback](https://github.com/obsdoghq/obsdog-releases/issues/new/choose) ·
+[Feedback privacy guide](FEEDBACK.md) ·
+[AI-client setup](https://github.com/obsdoghq/skills/blob/main/docs/SETUP.md)
+
+Installing the [ObsDog plugin](https://github.com/obsdoghq/skills) does **not**
+install this CLI. Confirm `obsdog version` in your AI client's environment, then
+invoke a plugin skill in a fresh session. Optional global AGENTS.md/CLAUDE.md
+instructions are explained in the setup guide; no global files are overwritten.
+
 ## CLI free beta — Apple silicon macOS
 
 No account or GitHub login is required for local use. Choose **one** installation
@@ -19,7 +28,7 @@ obsdog version
 ```
 
 The [official tap](https://github.com/obsdoghq/homebrew-tap) installs the exact
-checksum-pinned v0.2.1 binary and its license notices. If Homebrew requests trust,
+checksum-pinned v0.2.2 binary and its license notices. If Homebrew requests trust,
 review and approve this formula only; whole-tap trust is unnecessary.
 
 ### Standalone installer
@@ -28,14 +37,15 @@ Download the installer and checksum manifest from the same immutable release,
 inspect them, then install:
 
 ```sh
-curl -fL --proto '=https' -o obsdog-install.sh https://github.com/obsdoghq/obsdog-releases/releases/download/v0.2.1/install.sh
-curl -fL --proto '=https' -o obsdog-checksums.txt https://github.com/obsdoghq/obsdog-releases/releases/download/v0.2.1/checksums.txt
+curl -fL --proto '=https' -o obsdog-install.sh https://github.com/obsdoghq/obsdog-releases/releases/download/v0.2.2/install.sh
+curl -fL --proto '=https' -o obsdog-checksums.txt https://github.com/obsdoghq/obsdog-releases/releases/download/v0.2.2/checksums.txt
 shasum -a 256 obsdog-install.sh
 # Compare that hash with the install.sh entry in obsdog-checksums.txt.
 less obsdog-install.sh
 sh obsdog-install.sh --dry-run
 sh obsdog-install.sh
 export PATH="$HOME/.local/bin:$PATH"
+obsdog version
 obsdog --help
 obsdog --licenses
 ```
@@ -70,12 +80,19 @@ it does not claim an independently demonstrated hit-rate improvement.
 
 ## Start locally
 
+v0.2.2 adds Unicode-normalized, whitespace-insensitive substring search, typed
+`care source` checks, `document list` and an [offline dashboard](guides/local-dashboard.md).
+The dashboard shows Top 1/3/10 utilization with samples/coverage, activity trends,
+useful ratings, edits and restructuring. Unobserved use is unknown, not failure;
+updates are activity, not proven improvement. See [release notes](releases/v0.2.2.md).
+
 Use the same Personal knowledge from any directory, with no setup required:
 
 ```sh
 obsdog document import --file README.md
+obsdog document list
 obsdog search "installation"
-obsdog wiki serve
+obsdog dashboard serve
 ```
 
 Knowledge lives under `~/.obsdog`. Commands default to Personal; select another
@@ -100,8 +117,8 @@ Development (`odev`) and package-manager installations are not overwritten.
 Users of the earlier private CLI should run this installer once to adopt the
 public update channel. Installation does not migrate or discard Space data.
 
-The actual anonymous v0.2.1 install (including paths with spaces),
-v0.1.8-to-v0.2.1 update, retained synthetic Space and attributed agent actions
+The actual anonymous v0.2.2 install (including paths with spaces),
+v0.1.8-to-v0.2.2 update, retained synthetic Space and attributed agent actions
 were verified. Homebrew validation is recorded in the
 [official tap](https://github.com/obsdoghq/homebrew-tap#maintainers).
 v0.1.7 is a superseded packaging candidate;
@@ -117,7 +134,7 @@ AI callers should use `--actor-type agent --actor your-agent` on `document impor
 identify the caller as an agent. In project instructions, name an exact Space ID
 when that project needs a different boundary, and pass it explicitly on every
 command; do not infer it from a working directory. Use ObsDog skills/plugin
-v0.3.1 or newer for retrieval-oriented authoring guidance. See [v0.2.1 release notes](releases/v0.2.1.md) and
+v0.3.2 or newer for current offline visibility and setup guidance. See [v0.2.2 release notes](releases/v0.2.2.md) and
 [the source-aware care guide](guides/knowledge-care.md) for the exact JSON and
 safe AI workflow. Source checks are not task usefulness; unknown notes are not
 silently verified. [Living memory](guides/living-memory.md) explains observed
@@ -150,9 +167,11 @@ is documented at [ObsDog](https://obsdog.ai) and [Docs](https://docs.obsdog.ai).
 
 ## Feedback and security
 
-Use this repository's issues for reproducible CLI feedback, but do not attach
-documents, tokens, unredacted logs or personal data. For a security concern or
-account-specific support, email [support](mailto:jh145478@gmail.com).
+Use the [guided feedback forms](https://github.com/obsdoghq/obsdog-releases/issues/new/choose)
+for bugs, first-use experiences or ideas. Read [the safety guide](FEEDBACK.md)
+before posting; never attach documents, tokens, unredacted logs or personal data.
+For a security concern or account-specific support, email
+[support](mailto:jh145478@gmail.com) rather than posting publicly.
 
 Hosted use is covered by the [Terms](https://obsdog.ai/terms/) and
 [Privacy Policy](https://obsdog.ai/privacy/). Keep recoverable backups during

@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security or account-specific help
+    url: https://github.com/obsdoghq/obsdog-releases#feedback-and-security
+    about: Use the existing support email; do not post sensitive details publicly.
+  - name: Install the CLI and plugin
+    url: https://github.com/obsdoghq/skills/blob/main/docs/SETUP.md
+    about: Separate CLI/plugin readiness and optional AI-client instructions.
+  - name: Feedback privacy guide
+    url: https://github.com/obsdoghq/obsdog-releases/blob/main/FEEDBACK.md
+    about: Read before sharing logs, screenshots or reproduction steps.

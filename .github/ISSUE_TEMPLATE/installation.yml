@@ -1,0 +1,38 @@
+name: Installation and first-use feedback
+description: Tell us where setup felt confusing, even if nothing broke.
+body:
+  - type: markdown
+    attributes:
+      value: Thanks for trying ObsDog. The plugin and CLI are separate installs. Please share no private documents, tokens, paths, URLs or identifiers; this issue is public.
+  - type: textarea
+    id: environment
+    attributes:
+      label: Versions and installation route
+      description: CLI/plugin/client versions and OS; Homebrew or standalone; Codex or Claude Code.
+    validations:
+      required: true
+  - type: checkboxes
+    id: verified
+    attributes:
+      label: What you actually verified
+      description: Leave unchecked any stage you have not tried. These are not prerequisites to giving feedback.
+      options:
+        - label: Plugin installation completed.
+        - label: obsdog version works inside my agent environment.
+        - label: Local document import, list, read or search works.
+        - label: I invoked an ObsDog skill in a fresh client session.
+        - label: I opened the local dashboard.
+  - type: textarea
+    id: experience
+    attributes:
+      label: What was clear, confusing or missing?
+      description: Include the command or documentation section you expected to find.
+    validations:
+      required: true
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: Privacy check
+      options:
+        - label: I removed private knowledge, credentials and identifying details from this public report.
+          required: true
