@@ -10,10 +10,32 @@ It does **not** contain the proprietary application source code.
 [Feedback privacy guide](FEEDBACK.md) ·
 [AI-client setup](https://github.com/obsdoghq/skills/blob/main/docs/SETUP.md)
 
-Installing the [ObsDog plugin](https://github.com/obsdoghq/skills) does **not**
-install this CLI. Confirm `obsdog version` in your AI client's environment, then
-invoke a plugin skill in a fresh session. Optional global AGENTS.md/CLAUDE.md
-instructions are explained in the setup guide; no global files are overwritten.
+## Quick Start — CLI + AI plugin
+
+On Apple silicon macOS with Codex or Claude Code already installed (and Homebrew
+if the CLI is not yet installed),
+run the public [agent setup helper](scripts/setup-agent.sh). It installs/reuses
+the CLI and then installs the plugin for **one** chosen client. For Codex:
+
+```sh
+setup="$(mktemp)" && curl -fsSL https://raw.githubusercontent.com/obsdoghq/obsdog-releases/d64550e384c3ed7c577c26d707f062e847c5985a/scripts/setup-agent.sh -o "$setup" && sh "$setup" --client codex
+obsdog version
+obsdog document list
+```
+
+For Claude Code, use the same URL with `--client claude` instead. Inspect the
+[helper source](https://github.com/obsdoghq/obsdog-releases/blob/d64550e384c3ed7c577c26d707f062e847c5985a/scripts/setup-agent.sh)
+first or append `--dry-run` to see its actions. It needs network access to
+Homebrew/the plugin marketplace during installation, but local Personal use
+needs no account or connection. An empty list is normal. In a **fresh agent
+session**, invoke ObsDog `find` to check that the skill loads. The helper does
+not create sample knowledge, sign in, sync, upload, or edit global instructions.
+If either half fails, it reports the failed stage; rerun after fixing that stage.
+
+CLI-only use needs no plugin; use either method below. Installing the
+[plugin](https://github.com/obsdoghq/skills) by itself does **not** install the
+CLI. The [setup guide](https://github.com/obsdoghq/skills/blob/main/docs/SETUP.md)
+covers optional proactive agent instructions without overwriting global files.
 
 ## CLI free beta — Apple silicon macOS
 
@@ -78,7 +100,7 @@ of timestamp ordering, and equivalent reindexing retains deterministic ordering.
 The `lexical/current-v1` baseline preserves source history and recorded evidence;
 it does not claim an independently demonstrated hit-rate improvement.
 
-## Start locally
+## What to do after installation
 
 v0.2.4 adds [bounded AI care](guides/ai-care.md): checked updates, splits,
 extraction/merge and conditional recovery with exact history and attributable
