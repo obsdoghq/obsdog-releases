@@ -1,6 +1,7 @@
 # Distribution repository
 
-- Keep this repository limited to public download documentation and metadata.
+- Keep this repository limited to public download documentation, metadata and
+  narrowly scoped public installation helpers; no application implementation.
 - Never copy proprietary source, deployment configuration, credentials or user data here.
 - Release artifacts are built and tested in the private source repository.
 - Never overwrite a published tag or release asset; issue a new version.
