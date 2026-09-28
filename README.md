@@ -63,7 +63,7 @@ obsdog version
 ```
 
 The [official tap](https://github.com/obsdoghq/homebrew-tap) installs the exact
-checksum-pinned v0.2.4 binary and its license notices. If Homebrew requests trust,
+checksum-pinned v0.2.5 binary and its license notices. If Homebrew requests trust,
 review and approve this formula only; whole-tap trust is unnecessary.
 
 ### Standalone installer
@@ -72,8 +72,8 @@ Download the installer and checksum manifest from the same immutable release,
 inspect them, then install:
 
 ```sh
-curl -fL --proto '=https' -o obsdog-install.sh https://github.com/obsdoghq/obsdog-releases/releases/download/v0.2.4/install.sh
-curl -fL --proto '=https' -o obsdog-checksums.txt https://github.com/obsdoghq/obsdog-releases/releases/download/v0.2.4/checksums.txt
+curl -fL --proto '=https' -o obsdog-install.sh https://github.com/obsdoghq/obsdog-releases/releases/download/v0.2.5/install.sh
+curl -fL --proto '=https' -o obsdog-checksums.txt https://github.com/obsdoghq/obsdog-releases/releases/download/v0.2.5/checksums.txt
 shasum -a 256 obsdog-install.sh
 # Compare that hash with the install.sh entry in obsdog-checksums.txt.
 less obsdog-install.sh
@@ -114,6 +114,13 @@ The `lexical/current-v1` baseline preserves source history and recorded evidence
 it does not claim an independently demonstrated hit-rate improvement.
 
 ## What to do after installation
+
+v0.2.5 keeps returned-only searches in the event history but excludes them from
+the bounded Living-memory scoring input. A library with many unopened results
+can still project its observed opens and evaluations; overflow from potentially
+scoring events still falls back explicitly to lexical search. This patch does
+not delete knowledge, change the scoring weights or prove a retrieval gain.
+See [release notes](releases/v0.2.5.md).
 
 v0.2.4 adds [bounded AI care](guides/ai-care.md): checked updates, splits,
 extraction/merge and conditional recovery with exact history and attributable
@@ -162,9 +169,9 @@ Development (`odev`) and package-manager installations are not overwritten.
 Users of the earlier private CLI should run this installer once to adopt the
 public update channel. Installation does not migrate or discard Space data.
 
-The actual anonymous v0.2.4 install (including paths with spaces),
-v0.1.8-to-v0.2.4 update, retained synthetic Space and attributed agent actions
-were verified. Homebrew validation is recorded in the
+The v0.2.5 source package passed local race/vet, installer integrity, archive
+decoder, SPDX and checksum checks. Anonymous published install and retained-data
+upgrade are separate delivery gates. Homebrew validation is recorded in the
 [official tap](https://github.com/obsdoghq/homebrew-tap#maintainers).
 v0.1.7 is a superseded packaging candidate;
 its unchanged archive is retained for audit and is not recommended.
