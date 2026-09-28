@@ -28,7 +28,7 @@ obsdog version
 ```
 
 The [official tap](https://github.com/obsdoghq/homebrew-tap) installs the exact
-checksum-pinned v0.2.3 binary and its license notices. If Homebrew requests trust,
+checksum-pinned v0.2.4 binary and its license notices. If Homebrew requests trust,
 review and approve this formula only; whole-tap trust is unnecessary.
 
 ### Standalone installer
@@ -37,8 +37,8 @@ Download the installer and checksum manifest from the same immutable release,
 inspect them, then install:
 
 ```sh
-curl -fL --proto '=https' -o obsdog-install.sh https://github.com/obsdoghq/obsdog-releases/releases/download/v0.2.3/install.sh
-curl -fL --proto '=https' -o obsdog-checksums.txt https://github.com/obsdoghq/obsdog-releases/releases/download/v0.2.3/checksums.txt
+curl -fL --proto '=https' -o obsdog-install.sh https://github.com/obsdoghq/obsdog-releases/releases/download/v0.2.4/install.sh
+curl -fL --proto '=https' -o obsdog-checksums.txt https://github.com/obsdoghq/obsdog-releases/releases/download/v0.2.4/checksums.txt
 shasum -a 256 obsdog-install.sh
 # Compare that hash with the install.sh entry in obsdog-checksums.txt.
 less obsdog-install.sh
@@ -79,6 +79,12 @@ The `lexical/current-v1` baseline preserves source history and recorded evidence
 it does not claim an independently demonstrated hit-rate improvement.
 
 ## Start locally
+
+v0.2.4 adds [bounded AI care](guides/ai-care.md): checked updates, splits,
+extraction/merge and conditional recovery with exact history and attributable
+outcomes. Connected structural care needs server v0.1.29+, compatible active
+writers and explicit preparation of the existing connection. It does not enable
+sync or run automatic maintenance. See [release notes](releases/v0.2.4.md).
 
 v0.2.3 adds [frozen search pages](guides/search-pages.md), explicit first-page-use
 samples, relative document links, separate comment proposals and compact observed
@@ -138,7 +144,8 @@ AI callers should use `--actor-type agent --actor your-agent` on `document impor
 identify the caller as an agent. In project instructions, name an exact Space ID
 when that project needs a different boundary, and pass it explicitly on every
 command; do not infer it from a working directory. Use ObsDog skills/plugin
-v0.3.4 or newer for current offline visibility, paging and setup guidance. See [v0.2.3 release notes](releases/v0.2.3.md) and
+v0.3.5 or newer for task-entry recall, authorized selective capture and bounded
+care guidance. See [v0.2.4 release notes](releases/v0.2.4.md) and
 [the source-aware care guide](guides/knowledge-care.md) for the exact JSON and
 safe AI workflow. Source checks are not task usefulness; unknown notes are not
 silently verified. [Living memory](guides/living-memory.md) explains observed
