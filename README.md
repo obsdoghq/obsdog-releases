@@ -14,23 +14,36 @@ It does **not** contain the proprietary application source code.
 
 On Apple silicon macOS with Codex or Claude Code already installed (and Homebrew
 if the CLI is not yet installed),
-run the public [agent setup helper](scripts/setup-agent.sh). It installs/reuses
-the CLI and then installs the plugin for **one** chosen client. For Codex:
+run the first-party installer at `https://obsdog.ai/install.sh`. It pins and
+checksum-verifies the public [agent setup helper](scripts/setup-agent.sh),
+which installs/reuses the CLI and then installs the plugin for **one** chosen
+client. For Codex:
 
 ```sh
-setup="$(mktemp)" && curl -fsSL https://raw.githubusercontent.com/obsdoghq/obsdog-releases/d64550e384c3ed7c577c26d707f062e847c5985a/scripts/setup-agent.sh -o "$setup" && sh "$setup" --client codex
+curl -fsSL https://obsdog.ai/install.sh | sh -s -- --client codex
 obsdog version
 obsdog document list
 ```
 
-For Claude Code, use the same URL with `--client claude` instead. Inspect the
+For Claude Code, change the final flag to `--client claude`. To inspect the
+entry before execution, download and read it first:
+
+```sh
+curl -fsSLo obsdog-agent-install.sh https://obsdog.ai/install.sh
+less obsdog-agent-install.sh
+sh obsdog-agent-install.sh --client codex
+```
+
+The entry pins the immutable
 [helper source](https://github.com/obsdoghq/obsdog-releases/blob/d64550e384c3ed7c577c26d707f062e847c5985a/scripts/setup-agent.sh)
-first or append `--dry-run` to see its actions. It needs network access to
+and its SHA-256; append `--dry-run` to preview actions. It needs network access to
 Homebrew/the plugin marketplace during installation, but local Personal use
 needs no account or connection. An empty list is normal. In a **fresh agent
 session**, invoke ObsDog `find` to check that the skill loads. The helper does
 not create sample knowledge, sign in, sync, upload, or edit global instructions.
 If either half fails, it reports the failed stage; rerun after fixing that stage.
+The installer sends no success telemetry. Public website command-copy counts
+require diagnostics consent and represent interest, not completed installs.
 
 CLI-only use needs no plugin; use either method below. Installing the
 [plugin](https://github.com/obsdoghq/skills) by itself does **not** install the
