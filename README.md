@@ -149,3 +149,10 @@ account-specific support, email [support](mailto:jh145478@gmail.com).
 Hosted use is covered by the [Terms](https://obsdog.ai/terms/) and
 [Privacy Policy](https://obsdog.ai/privacy/). Keep recoverable backups during
 beta. A public download does not promise a service-level agreement.
+
+## Documentation checks
+
+Before publishing changes, run `python3 -m unittest discover -s tests` and
+`python3 scripts/check_public_content.py`. These checks flag common accidental
+internal details without printing matched values. They supplement review and
+do not certify historical commits, remote release metadata or binary contents.
