@@ -27,7 +27,11 @@ Space ID, binary version and release channel. No daemon is installed.
   source blocks. Neither is a truth/usefulness score or semantic distance.
 - Activity: 7/30/90-day UTC records split by all/human/agent attribution. Search,
   exposure, use and usefulness are not one funnel. Daily exact values accompany
-  the chart. Current inventory is not fabricated historical growth.
+  the chart. A bounded newest-first feed below it shows exact attributed
+  searches and document/care changes. Search rows expand into the recorded
+  results and retrieval/open/use/evaluation sequence. A returned result is not
+  counted as used merely because it appears. Current inventory is not
+  fabricated historical growth.
 - Sources: revision-bound checks with source version, method, scope, evidence
   and actor. Private source locators are supported. Declarations ≠ verification;
   a narrow claim check is not a full applicability assessment.
@@ -40,6 +44,11 @@ The graph is bounded to 200 nodes/500 edges, source scans to 10,000 blocks/2,000
 comments/16 MiB; truncation is visible. Source details show at most 200 current,
 stale or conflicting records. No edit/approve/undo UI is added.
 
+Individual timestamps use the viewing browser device's time zone (including
+daylight-saving rules). Daily aggregate buckets and comparison intervals stay
+UTC and are labeled as such. Merely reformatting a UTC bucket as a local date
+would misstate its count; local-day aggregation is a separate future contract.
+
 `obsdog insights show --days 30 --actor agent --format json` reads the same
 snapshot without serving a page, creating a report or migrating the database.
 Its current graph, source evidence and event-window aggregates share a read
@@ -51,7 +60,11 @@ sync protocol. `/_obsdog/insights` is the corresponding same-origin GET endpoint
 The server binds IPv4 loopback only. It rejects non-loopback Host headers,
 foreign Origin headers and cross-site subresource requests. There is no CORS,
 LAN discovery, remote script/font/image, analytics or diagnostic initialization
-for dashboard/wiki/insights commands. CSP blocks remote document embeds.
+for dashboard/wiki/insights commands. The dashboard backend may make a bounded
+public CLI-release metadata check to show an update notice, sharing the CLI's
+24-hour cache; this sends no Space content or tokens and cannot block offline
+viewing. Set `OBSDOG_NO_UPDATE_NOTIFIER=1` to disable it. CSP blocks remote
+document embeds.
 Explicit source links leave the app only when clicked, with no referrer.
 Same-machine processes and browser extensions are not isolated by loopback;
 this is not a multi-user or remotely exposed server. Do not reverse-proxy it.
