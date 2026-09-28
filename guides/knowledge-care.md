@@ -1,6 +1,7 @@
 # Source-aware knowledge care
 
-Available in CLI v0.1.14; connected Spaces require server v0.1.26 and compatible
+Available since CLI v0.1.14; use v0.1.15 or later for normal newline-terminated
+replacement files. Connected Spaces require server v0.1.26 and compatible
 active clients before the first care write. Native apps remain on hold. Upgrade
 does not classify existing documents, crawl sources, enable sync, or install plugins.
 
