@@ -19,7 +19,7 @@ obsdog version
 ```
 
 The [official tap](https://github.com/obsdoghq/homebrew-tap) installs the exact
-checksum-pinned v0.1.15 binary and its license notices. If Homebrew requests trust,
+checksum-pinned v0.1.16 binary and its license notices. If Homebrew requests trust,
 review and approve this formula only; whole-tap trust is unnecessary.
 
 ### Standalone installer
@@ -28,8 +28,8 @@ Download the installer and checksum manifest from the same immutable release,
 inspect them, then install:
 
 ```sh
-curl -fL --proto '=https' -o obsdog-install.sh https://github.com/obsdoghq/obsdog-releases/releases/download/v0.1.15/install.sh
-curl -fL --proto '=https' -o obsdog-checksums.txt https://github.com/obsdoghq/obsdog-releases/releases/download/v0.1.15/checksums.txt
+curl -fL --proto '=https' -o obsdog-install.sh https://github.com/obsdoghq/obsdog-releases/releases/download/v0.1.16/install.sh
+curl -fL --proto '=https' -o obsdog-checksums.txt https://github.com/obsdoghq/obsdog-releases/releases/download/v0.1.16/checksums.txt
 shasum -a 256 obsdog-install.sh
 # Compare that hash with the install.sh entry in obsdog-checksums.txt.
 less obsdog-install.sh
@@ -49,13 +49,17 @@ notarization ticket or an independent publisher signature.
 The release includes the binary license, third-party notices, SPDX inventory,
 source revision identifier, and checksum manifest. These terminal CLI archives
 are not the notarized macOS desktop application. Intel macOS, Windows, Linux
-and a public macOS app download are not offered by this release. v0.1.15 retains
+and a public macOS app download are not offered by this release. v0.1.16 retains
 no-init Personal selection, explicit AI authorship, history-preserving Personal
 adoption and current hosted OAuth compatibility. It adds revision-bound source
 declarations, authoring reviews and source/temporal filters. Connected care writes
 require server v0.1.26 and compatible active clients; keep recoverable backups.
 v0.1.15 corrects v0.1.14's rejection of normal newline-terminated block replacement
-files without weakening the single-block or current-revision guards.
+files without weakening the single-block or current-revision guards. v0.1.16
+derives fading, revision-bound usage activation from real observations and adds
+bounded same-query adaptive ranking, with `--ranking lexical` as the baseline.
+No source or history is deleted; no unobserved note is rated bad. Use
+`obsdog memory show --format json` to inspect the evidence and policy.
 Installing it does not upload data or merge libraries automatically.
 
 ## Start locally
@@ -90,8 +94,10 @@ Development (`odev`) and package-manager installations are not overwritten.
 Users of the earlier private CLI should run this installer once to adopt the
 public update channel. Installation does not migrate or discard Space data.
 
-The actual anonymous default v0.1.15 install (including paths with spaces), v0.1.8-to-v0.1.15 update and
-preservation of an isolated synthetic Space were verified. v0.1.7 is a superseded packaging candidate;
+The actual anonymous default v0.1.16 install (including paths with spaces),
+v0.1.8-to-v0.1.16 update, retained synthetic Space and attributed agent actions
+were verified. Homebrew style, strict audit, upgrade and formula tests also pass.
+v0.1.7 is a superseded packaging candidate;
 its unchanged archive is retained for audit and is not recommended.
 
 Use `command -v obsdog` to confirm which installation owns the command. Do not
@@ -103,10 +109,13 @@ AI callers should use `--actor-type agent --actor your-agent` on `document impor
 --evaluator your-agent` flags on `feedback add`. JSON output alone does not
 identify the caller as an agent. New or repaired project guidance includes these
 options; review `obsdog init --dry-run` before refreshing existing guidance with
-`obsdog init --repair`. See [v0.1.15 release notes](releases/v0.1.15.md) and
+`obsdog init --repair`. See [v0.1.16 release notes](releases/v0.1.16.md) and
 [the source-aware care guide](guides/knowledge-care.md) for the exact JSON and
 safe AI workflow. Source checks are not task usefulness; unknown notes are not
-silently verified. No background worker, automatic ranking or deletion is enabled.
+silently verified. [Living memory](guides/living-memory.md) explains observed
+connections, decay and the bounded ranking adjustment. No background worker,
+automatic factual inference or deletion is enabled. Performance improvement is
+an evaluation question, not a claim established by shipping this policy.
 
 ## Optional hosted Personal beta
 
