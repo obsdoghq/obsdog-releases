@@ -28,7 +28,7 @@ obsdog version
 ```
 
 The [official tap](https://github.com/obsdoghq/homebrew-tap) installs the exact
-checksum-pinned v0.2.2 binary and its license notices. If Homebrew requests trust,
+checksum-pinned v0.2.3 binary and its license notices. If Homebrew requests trust,
 review and approve this formula only; whole-tap trust is unnecessary.
 
 ### Standalone installer
@@ -37,8 +37,8 @@ Download the installer and checksum manifest from the same immutable release,
 inspect them, then install:
 
 ```sh
-curl -fL --proto '=https' -o obsdog-install.sh https://github.com/obsdoghq/obsdog-releases/releases/download/v0.2.2/install.sh
-curl -fL --proto '=https' -o obsdog-checksums.txt https://github.com/obsdoghq/obsdog-releases/releases/download/v0.2.2/checksums.txt
+curl -fL --proto '=https' -o obsdog-install.sh https://github.com/obsdoghq/obsdog-releases/releases/download/v0.2.3/install.sh
+curl -fL --proto '=https' -o obsdog-checksums.txt https://github.com/obsdoghq/obsdog-releases/releases/download/v0.2.3/checksums.txt
 shasum -a 256 obsdog-install.sh
 # Compare that hash with the install.sh entry in obsdog-checksums.txt.
 less obsdog-install.sh
@@ -80,6 +80,10 @@ it does not claim an independently demonstrated hit-rate improvement.
 
 ## Start locally
 
+v0.2.3 adds [frozen search pages](guides/search-pages.md), explicit first-page-use
+samples, relative document links, separate comment proposals and compact observed
+memory summaries. [Release notes](releases/v0.2.3.md) explain the boundaries.
+
 v0.2.2 adds Unicode-normalized, whitespace-insensitive substring search, typed
 `care source` checks, `document list` and an [offline dashboard](guides/local-dashboard.md).
 The dashboard shows Top 1/3/10 utilization with samples/coverage, activity trends,
@@ -117,8 +121,8 @@ Development (`odev`) and package-manager installations are not overwritten.
 Users of the earlier private CLI should run this installer once to adopt the
 public update channel. Installation does not migrate or discard Space data.
 
-The actual anonymous v0.2.2 install (including paths with spaces),
-v0.1.8-to-v0.2.2 update, retained synthetic Space and attributed agent actions
+The actual anonymous v0.2.3 install (including paths with spaces),
+v0.1.8-to-v0.2.3 update, retained synthetic Space and attributed agent actions
 were verified. Homebrew validation is recorded in the
 [official tap](https://github.com/obsdoghq/homebrew-tap#maintainers).
 v0.1.7 is a superseded packaging candidate;
@@ -134,7 +138,7 @@ AI callers should use `--actor-type agent --actor your-agent` on `document impor
 identify the caller as an agent. In project instructions, name an exact Space ID
 when that project needs a different boundary, and pass it explicitly on every
 command; do not infer it from a working directory. Use ObsDog skills/plugin
-v0.3.2 or newer for current offline visibility and setup guidance. See [v0.2.2 release notes](releases/v0.2.2.md) and
+v0.3.4 or newer for current offline visibility, paging and setup guidance. See [v0.2.3 release notes](releases/v0.2.3.md) and
 [the source-aware care guide](guides/knowledge-care.md) for the exact JSON and
 safe AI workflow. Source checks are not task usefulness; unknown notes are not
 silently verified. [Living memory](guides/living-memory.md) explains observed

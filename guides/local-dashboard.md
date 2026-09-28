@@ -18,8 +18,11 @@ Space ID, binary version and release channel. No daemon is installed.
 - Knowledge: server-rendered Markdown, substring search, exact result opening,
   current block evidence, labels, comments, revisions and sources.
 - Graph: current in-Space document references, plus current open evidence and
-  explanation comments. Exact-ID links only; code examples, external links,
-  unresolved titles, stale/closed comments and question proposals are not edges.
+  explanation comments. Stable IDs and exact imported relative paths resolve
+  in the same Space. No filesystem reads or ambiguous-path guesses occur.
+  Current document/block question comments are opt-in, attributed proposals,
+  separate from citation strength. Code examples, external links, unresolved
+  titles and stale/closed comments are not current citations.
   Larger tiles mean more unique neighbors. Thicker lines mean more distinct
   source blocks. Neither is a truth/usefulness score or semantic distance.
 - Activity: 7/30/90-day UTC records split by all/human/agent attribution. Search,
@@ -78,10 +81,12 @@ Top 1/3/10 utilization uses distinct completed search runs with an exact,
 same-actor direct use inside rank K, over runs with any observed use. Repeated
 uses vote once per run. Show used runs / all searches as observation coverage;
 unobserved use is unknown, not failed. This is not independent task success.
-The CLI currently returns one bounded list, not paginated results. Historical
-rank is recorded but page number/size are not; never infer them retroactively.
-When all results are limited to ten, Top 10 among used runs must be 100%, so it
-is not by itself evidence of good retrieval. Use smaller K and coverage together.
+New searches freeze a bounded window with explicit page/global rank. First-page
+use divides runs with an explicitly used page-1 hit by completed page-aware runs,
+including empty searches. Legacy runs have no page metadata and are excluded.
+Top K remains conditional on observed use. See [search pages](search-pages.md).
+When all returned results fit within ten, Top 10 among used runs must be 100%,
+so it alone does not prove good retrieval. Use smaller K and coverage together.
 
 Useful ratings count explicit usefulness judgments; direct block updates exclude
 initial import and split/merge successor revisions. Restructuring counts distinct
@@ -94,3 +99,7 @@ the detail panel displays exact intervals and values. Percentage-point changes
 need samples on both sides. Older-period rates use evidence observed before
 that period's end, not later uses. Inventory and current source state are separate
 from time-windowed measurements. Actor filters do not filter inventory.
+
+`memory show --summary --format json` provides compact observed query/co-use
+coverage. It is different from the current document-reference graph shown here.
+No artificial links, searches or ratings are generated to fill either map.
