@@ -19,7 +19,7 @@ obsdog version
 ```
 
 The [official tap](https://github.com/obsdoghq/homebrew-tap) installs the exact
-checksum-pinned v0.1.16 binary and its license notices. If Homebrew requests trust,
+checksum-pinned v0.2.0 binary and its license notices. If Homebrew requests trust,
 review and approve this formula only; whole-tap trust is unnecessary.
 
 ### Standalone installer
@@ -28,8 +28,8 @@ Download the installer and checksum manifest from the same immutable release,
 inspect them, then install:
 
 ```sh
-curl -fL --proto '=https' -o obsdog-install.sh https://github.com/obsdoghq/obsdog-releases/releases/download/v0.1.16/install.sh
-curl -fL --proto '=https' -o obsdog-checksums.txt https://github.com/obsdoghq/obsdog-releases/releases/download/v0.1.16/checksums.txt
+curl -fL --proto '=https' -o obsdog-install.sh https://github.com/obsdoghq/obsdog-releases/releases/download/v0.2.0/install.sh
+curl -fL --proto '=https' -o obsdog-checksums.txt https://github.com/obsdoghq/obsdog-releases/releases/download/v0.2.0/checksums.txt
 shasum -a 256 obsdog-install.sh
 # Compare that hash with the install.sh entry in obsdog-checksums.txt.
 less obsdog-install.sh
@@ -49,8 +49,8 @@ notarization ticket or an independent publisher signature.
 The release includes the binary license, third-party notices, SPDX inventory,
 source revision identifier, and checksum manifest. These terminal CLI archives
 are not the notarized macOS desktop application. Intel macOS, Windows, Linux
-and a public macOS app download are not offered by this release. v0.1.16 retains
-no-init Personal selection, explicit AI authorship, history-preserving Personal
+and a public macOS app download are not offered by this release. v0.2.0 removes
+project initialization and path-based Space selection. It retains explicit AI authorship, history-preserving Personal
 adoption and current hosted OAuth compatibility. It adds revision-bound source
 declarations, authoring reviews and source/temporal filters. Connected care writes
 require server v0.1.26 and compatible active clients; keep recoverable backups.
@@ -73,11 +73,11 @@ obsdog wiki serve
 ```
 
 Knowledge lives under `~/.obsdog`. Commands default to Personal; select another
-existing library with `--space <space-id>`. An explicit broken binding fails
-visibly rather than writing elsewhere. If multiple existing libraries make the
-default ambiguous, use `obsdog space default --set <space-id>`. Optional
-`obsdog init --dry-run` previews project guidance without creating a separate
-library for every repository. The Wiki uses
+existing library with `--space <space-id>`. A missing explicit ID fails visibly
+rather than writing elsewhere. If multiple existing libraries make the default
+ambiguous, use `obsdog space default --set <space-id>`. `init`, `--path` and
+`--source-path` are removed, without compatibility aliases. The current directory
+and old project bindings do not select a Space. The Wiki uses
 `http://127.0.0.1:47777` by default. Use `obsdog <command> --help` for options.
 Local usage is not metered and does not require network access.
 
@@ -94,9 +94,10 @@ Development (`odev`) and package-manager installations are not overwritten.
 Users of the earlier private CLI should run this installer once to adopt the
 public update channel. Installation does not migrate or discard Space data.
 
-The actual anonymous default v0.1.16 install (including paths with spaces),
-v0.1.8-to-v0.1.16 update, retained synthetic Space and attributed agent actions
-were verified. Homebrew style, strict audit, upgrade and formula tests also pass.
+The actual anonymous v0.2.0 install (including paths with spaces),
+v0.1.8-to-v0.2.0 update, retained synthetic Space and attributed agent actions
+were verified. Homebrew style, strict audit, 0.1.16-to-0.2.0 upgrade and formula
+tests pass, including rejection of removed commands and retained agent attribution.
 v0.1.7 is a superseded packaging candidate;
 its unchanged archive is retained for audit and is not recommended.
 
@@ -107,9 +108,10 @@ removes the Homebrew package, not your `~/.obsdog` knowledge or project bindings
 AI callers should use `--actor-type agent --actor your-agent` on `document import`,
 `block update`, `search`, `search open` and `search use`, and the separate `--evaluator-type agent
 --evaluator your-agent` flags on `feedback add`. JSON output alone does not
-identify the caller as an agent. New or repaired project guidance includes these
-options; review `obsdog init --dry-run` before refreshing existing guidance with
-`obsdog init --repair`. See [v0.1.16 release notes](releases/v0.1.16.md) and
+identify the caller as an agent. In project instructions, name an exact Space ID
+when that project needs a different boundary, and pass it explicitly on every
+command; do not infer it from a working directory. Use ObsDog skills/plugin
+v0.3.0 or newer with this CLI. See [v0.2.0 release notes](releases/v0.2.0.md) and
 [the source-aware care guide](guides/knowledge-care.md) for the exact JSON and
 safe AI workflow. Source checks are not task usefulness; unknown notes are not
 silently verified. [Living memory](guides/living-memory.md) explains observed
