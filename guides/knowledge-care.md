@@ -8,6 +8,10 @@ does not classify existing documents, crawl sources, enable sync, or install plu
 ## Agent workflow
 
 1. Search the exact Space, read the relevant Markdown and check the real source.
+   Before a new import, list/search for an existing canonical document and read
+   likely matches. `document import` always creates a new identity: v0.2.8
+   refuses exact source-path or content duplicates by default, but a different
+   temporary path or edited content does not mean the old document is updated.
 2. Choose the knowledge's proper home. Repository instructions and code contracts
    stay in their repository; ObsDog stores a discovery pointer or useful synthesis,
    not an unmaintained duplicate. A snapshot is explicitly versioned/historical.
@@ -16,6 +20,9 @@ does not classify existing documents, crawl sources, enable sync, or install plu
 4. Make a narrowly scoped content change if needed, then read it back. A single
    block update preserves one Markdown block and its type/depth. Use explicit
    structural operations for splitting/merging; do not smuggle a second paragraph.
+   Never use `document read > file`, edit, then `document import` as an update;
+   use revision-checked block edits or a reviewed care plan. Use `--fork` only
+   for an intentional separate document.
 5. Record only the source check or dimensions actually assessed. Read back the
    record. Sync only Spaces separately authorized for cloud sharing.
 
