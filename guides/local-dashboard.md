@@ -36,6 +36,10 @@ needs one manual restart to gain detection.
   becoming scattered map landmarks. Selecting a title focuses the document and
   its direct neighbors. Neither tile size nor map distance is a truth/usefulness
   score or semantic similarity.
+  On first load, a non-data trace appears only after a short delay. The real
+  written links and documents then reveal once. Refreshing unchanged data
+  keeps the viewport; reduced-motion settings skip the animation. The
+  placeholder is not a proposed link or observed use.
 - Activity: 7/30/90-day UTC records split by all/human/agent attribution. Search,
   exposure, use and usefulness are not one funnel. Daily exact values accompany
   the chart. A bounded newest-first feed below it shows exact attributed

@@ -63,7 +63,7 @@ obsdog version
 ```
 
 The [official tap](https://github.com/obsdoghq/homebrew-tap) installs the exact
-checksum-pinned v0.2.14 binary and its license notices. If Homebrew requests trust,
+checksum-pinned v0.2.15 binary and its license notices. If Homebrew requests trust,
 review and approve this formula only; whole-tap trust is unnecessary.
 
 ### Standalone installer
@@ -72,8 +72,8 @@ Download the installer and checksum manifest from the same immutable release,
 inspect them, then install:
 
 ```sh
-curl -fL --proto '=https' -o obsdog-install.sh https://github.com/obsdoghq/obsdog-releases/releases/download/v0.2.14/install.sh
-curl -fL --proto '=https' -o obsdog-checksums.txt https://github.com/obsdoghq/obsdog-releases/releases/download/v0.2.14/checksums.txt
+curl -fL --proto '=https' -o obsdog-install.sh https://github.com/obsdoghq/obsdog-releases/releases/download/v0.2.15/install.sh
+curl -fL --proto '=https' -o obsdog-checksums.txt https://github.com/obsdoghq/obsdog-releases/releases/download/v0.2.15/checksums.txt
 shasum -a 256 obsdog-install.sh
 # Compare that hash with the install.sh entry in obsdog-checksums.txt.
 less obsdog-install.sh
@@ -114,6 +114,10 @@ The `lexical/current-v1` baseline preserves source history and recorded evidence
 it does not claim an independently demonstrated hit-rate improvement.
 
 ## What to do after installation
+
+v0.2.15 [adds a one-time local Graph reveal and optional read-only search,
+recovery and Git-source diagnostics](releases/v0.2.15.md). It does not change
+the graph layout or default search ranking.
 
 v0.2.14 [shows whether old labels apply to the current revision, lists
 recorded source checks for follow-up, and adds a guarded section append to

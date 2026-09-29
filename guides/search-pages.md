@@ -12,6 +12,11 @@ At most 100 candidates are retained; this is not an exhaustive result count.
 Only delivered pages are recorded as returned hits. Unopened results stay
 unjudged. Record use only when it actually helps, not to complete a walkthrough.
 
+For a read-only current diagnostic, add `--no-observe --count-total` to
+`obsdog search`. This optionally counts all matching current blocks under the
+same filters without recording a retrieval run. It can cost more than the
+bounded search and is not a historical run metric or a larger frozen page.
+
 Pages retain exact result identities/order/revisions through edits, restart and
 backup. Replaying a page produces no extra search or returned-hit facts. A device
 missing retained evidence fails explicitly rather than substituting live text.
