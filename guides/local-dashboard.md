@@ -31,7 +31,11 @@ needs one manual restart to gain detection.
   separate from citation strength. Code examples, external links, unresolved
   titles and stale/closed comments are not current citations.
   Larger tiles mean more unique neighbors. Thicker lines mean more distinct
-  source blocks. Neither is a truth/usefulness score or semantic distance.
+  source blocks. Connected authored-link groups are packed separately; notes
+  without a visible written link stay in the searchable title list instead of
+  becoming scattered map landmarks. Selecting a title focuses the document and
+  its direct neighbors. Neither tile size nor map distance is a truth/usefulness
+  score or semantic similarity.
 - Activity: 7/30/90-day UTC records split by all/human/agent attribution. Search,
   exposure, use and usefulness are not one funnel. Daily exact values accompany
   the chart. A bounded newest-first feed below it shows exact attributed

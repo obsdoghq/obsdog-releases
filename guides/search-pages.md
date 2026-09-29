@@ -18,8 +18,17 @@ missing retained evidence fails explicitly rather than substituting live text.
 Use the original device or start a new run. Old runs without page metadata can
 still be opened but not paged. A changed query/filter needs a new search.
 
+For a deliberate QA or post-repair check on CLI v0.2.12+, use
+`obsdog search --no-observe --query '<original query>'`. It uses the current
+matcher/ranking and filters but creates no run, returned-hit record or metric;
+its first-page rows cannot be opened or marked used. Use normal search for
+actual task retrieval. Quoted terms require contiguous characters after
+whitespace removal; a quoted no-hit may show the bounded candidate count if
+quotes are removed. That is a reformulation hint, not evidence of an answer.
+
 Use `--exclude-headings` to seek answer-body blocks. Reading a heading does not
-mean reading its whole section. Scoped MCP clients use `obsdog_search_page`.
+mean reading its whole section. Scoped MCP clients use `obsdog_search_page` for
+normal retrieval and `obsdog_search_probe` for non-observing diagnostics.
 
 First-page use divides completed page-aware searches with explicit use of an
 exact page-1 hit by all completed page-aware searches, including empty searches.
