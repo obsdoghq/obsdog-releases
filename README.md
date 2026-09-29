@@ -63,7 +63,7 @@ obsdog version
 ```
 
 The [official tap](https://github.com/obsdoghq/homebrew-tap) installs the exact
-checksum-pinned v0.2.17 binary and its license notices. If Homebrew requests trust,
+checksum-pinned v0.2.18 binary and its license notices. If Homebrew requests trust,
 review and approve this formula only; whole-tap trust is unnecessary.
 
 ### Standalone installer
@@ -72,8 +72,8 @@ Download the installer and checksum manifest from the same immutable release,
 inspect them, then install:
 
 ```sh
-curl -fL --proto '=https' -o obsdog-install.sh https://github.com/obsdoghq/obsdog-releases/releases/download/v0.2.17/install.sh
-curl -fL --proto '=https' -o obsdog-checksums.txt https://github.com/obsdoghq/obsdog-releases/releases/download/v0.2.17/checksums.txt
+curl -fL --proto '=https' -o obsdog-install.sh https://github.com/obsdoghq/obsdog-releases/releases/download/v0.2.18/install.sh
+curl -fL --proto '=https' -o obsdog-checksums.txt https://github.com/obsdoghq/obsdog-releases/releases/download/v0.2.18/checksums.txt
 shasum -a 256 obsdog-install.sh
 # Compare that hash with the install.sh entry in obsdog-checksums.txt.
 less obsdog-install.sh
@@ -114,6 +114,10 @@ The `lexical/current-v1` baseline preserves source history and recorded evidence
 it does not claim an independently demonstrated hit-rate improvement.
 
 ## What to do after installation
+
+v0.2.18 [adapts Graph scale to the map and viewport](releases/v0.2.18.md):
+bounded node/click sizes, representative titles and reversible zoom/Fit retain
+every loaded document, including dense and independent maps.
 
 v0.2.17 [shows all loaded documents together](releases/v0.2.17.md), including
 independent notes, in the shared hosted/offline Graph. Circular focus emphasizes

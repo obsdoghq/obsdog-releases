@@ -38,6 +38,12 @@ needs one manual restart to gain detection.
   point emphasizes its direct neighbors and source links without hiding other
   groups; selecting it again clears focus. Neither marker size nor map
   distance is a truth/usefulness score or semantic similarity.
+  Marker size and click regions adapt to actual neighbor spacing, with modest
+  size caps for small maps and no overlapping hit regions on dense overviews.
+  Zoom/pan bounds follow fitted map geometry; Fit returns all loaded documents
+  to view. Representative and independent-note titles are collision-checked,
+  with more titles eligible when zoomed in. Small overview points always have
+  the complete searchable title/ID index as an alternative.
   On first load, a non-data trace appears only after a short delay. The real
   written links and documents then reveal once along each group's real adjacency;
   independent notes appear without invented links. The camera settles from close
