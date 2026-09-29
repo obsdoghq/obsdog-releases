@@ -185,9 +185,9 @@ Development (`odev`) and package-manager installations are not overwritten.
 Users of the earlier private CLI should run this installer once to adopt the
 public update channel. Installation does not migrate or discard Space data.
 
-The v0.2.5 source package passed local race/vet, installer integrity, archive
+The v0.2.8 source package passed local race/vet, installer integrity, archive
 decoder, SPDX and checksum checks. Anonymous published installation (including
-paths with spaces), v0.1.8-to-v0.2.5 update, retained synthetic knowledge and
+paths with spaces), v0.1.8-to-v0.2.8 update, retained synthetic knowledge and
 agent attribution also passed. Homebrew validation is recorded in the
 [official tap](https://github.com/obsdoghq/homebrew-tap#maintainers).
 v0.1.7 is a superseded packaging candidate;
