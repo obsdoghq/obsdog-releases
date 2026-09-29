@@ -63,7 +63,7 @@ obsdog version
 ```
 
 The [official tap](https://github.com/obsdoghq/homebrew-tap) installs the exact
-checksum-pinned v0.2.16 binary and its license notices. If Homebrew requests trust,
+checksum-pinned v0.2.17 binary and its license notices. If Homebrew requests trust,
 review and approve this formula only; whole-tap trust is unnecessary.
 
 ### Standalone installer
@@ -72,8 +72,8 @@ Download the installer and checksum manifest from the same immutable release,
 inspect them, then install:
 
 ```sh
-curl -fL --proto '=https' -o obsdog-install.sh https://github.com/obsdoghq/obsdog-releases/releases/download/v0.2.16/install.sh
-curl -fL --proto '=https' -o obsdog-checksums.txt https://github.com/obsdoghq/obsdog-releases/releases/download/v0.2.16/checksums.txt
+curl -fL --proto '=https' -o obsdog-install.sh https://github.com/obsdoghq/obsdog-releases/releases/download/v0.2.17/install.sh
+curl -fL --proto '=https' -o obsdog-checksums.txt https://github.com/obsdoghq/obsdog-releases/releases/download/v0.2.17/checksums.txt
 shasum -a 256 obsdog-install.sh
 # Compare that hash with the install.sh entry in obsdog-checksums.txt.
 less obsdog-install.sh
@@ -115,10 +115,14 @@ it does not claim an independently demonstrated hit-rate improvement.
 
 ## What to do after installation
 
-v0.2.16 [aligns the offline Graph with the hosted app](releases/v0.2.16.md):
-one connected component at a time, circular focus, an animated entrance and
-a searchable title/ID index for every loaded document. Refresh preserves the
-view. Restart running dashboard and MCP processes after updating.
+v0.2.17 [shows all loaded documents together](releases/v0.2.17.md), including
+independent notes, in the shared hosted/offline Graph. Circular focus emphasizes
+direct neighbors without hiding the rest of the map. Explicitly opened dashboard
+deep links work while cross-site API access remains blocked. Restart running
+dashboard and MCP processes after updating.
+
+v0.2.16 [introduced the shared visual system](releases/v0.2.16.md); v0.2.17
+replaces its component-at-a-time navigation with the full map.
 
 v0.2.15 [adds a one-time local Graph reveal and optional read-only search,
 recovery and Git-source diagnostics](releases/v0.2.15.md). It does not change

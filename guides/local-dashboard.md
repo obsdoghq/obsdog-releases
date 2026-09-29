@@ -30,18 +30,20 @@ needs one manual restart to gain detection.
   Current document/block question comments are opt-in, attributed proposals,
   separate from citation strength. Code examples, external links, unresolved
   titles and stale/closed comments are not current citations.
-  The hosted app and offline Graph share the same visual system and show one
-  connected component at a time. Larger circular markers indicate more unique
-  authored neighbors in that component; thicker lines mean more distinct source
-  blocks. The component selector and title/ID index reach every loaded document,
-  including independent notes. Selecting a point shows its direct neighbors and
-  source links; selecting it again clears focus. Neither marker size nor map
+  The hosted app and offline Graph share the same visual system and show every
+  loaded document in one map, including independent notes. Connected groups are
+  packed spatially, not displayed as separate screens. Larger circular markers
+  indicate more unique authored neighbors; thicker lines mean more distinct
+  source blocks. The title/ID index reaches every loaded document. Selecting a
+  point emphasizes its direct neighbors and source links without hiding other
+  groups; selecting it again clears focus. Neither marker size nor map
   distance is a truth/usefulness score or semantic similarity.
   On first load, a non-data trace appears only after a short delay. The real
-  written links and documents then reveal once from a real connected root while
-  the camera settles from close to wide. Selection never reruns the layout.
-  Refreshing unchanged data keeps the viewport; returning to a component restores
-  its camera. Replay is explicit, and reduced-motion settings skip spatial
+  written links and documents then reveal once along each group's real adjacency;
+  independent notes appear without invented links. The camera settles from close
+  to wide. Selection never reruns the layout or moves the camera. Refreshing
+  unchanged data keeps the viewport. Replay is explicit, and reduced-motion
+  settings skip spatial
   motion. The placeholder is not a proposed link or observed use.
 - Activity: 7/30/90-day UTC records split by all/human/agent attribution. Search,
   exposure, use and usefulness are not one funnel. Daily exact values accompany
@@ -83,6 +85,9 @@ public CLI-release metadata check to show an update notice, sharing the CLI's
 24-hour cache; this sends no Space content or tokens and cannot block offline
 viewing. Set `OBSDOG_NO_UPDATE_NOTIFIER=1` to disable it. CSP blocks remote
 document embeds.
+Explicit user-opened top-level HTML links to `/`, `/wiki`, `/graph`, `/activity`
+and `/sources` are permitted. This does not permit another website to fetch
+the local API, trigger a search, embed a dashboard frame or scan local knowledge.
 Explicit source links leave the app only when clicked, with no referrer.
 Same-machine processes and browser extensions are not isolated by loopback;
 this is not a multi-user or remotely exposed server. Do not reverse-proxy it.
