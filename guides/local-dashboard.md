@@ -30,16 +30,19 @@ needs one manual restart to gain detection.
   Current document/block question comments are opt-in, attributed proposals,
   separate from citation strength. Code examples, external links, unresolved
   titles and stale/closed comments are not current citations.
-  Larger tiles mean more unique neighbors. Thicker lines mean more distinct
-  source blocks. Connected authored-link groups are packed separately; notes
-  without a visible written link stay in the searchable title list instead of
-  becoming scattered map landmarks. Selecting a title focuses the document and
-  its direct neighbors. Neither tile size nor map distance is a truth/usefulness
-  score or semantic similarity.
+  The hosted app and offline Graph share the same visual system and show one
+  connected component at a time. Larger circular markers indicate more unique
+  authored neighbors in that component; thicker lines mean more distinct source
+  blocks. The component selector and title/ID index reach every loaded document,
+  including independent notes. Selecting a point shows its direct neighbors and
+  source links; selecting it again clears focus. Neither marker size nor map
+  distance is a truth/usefulness score or semantic similarity.
   On first load, a non-data trace appears only after a short delay. The real
-  written links and documents then reveal once. Refreshing unchanged data
-  keeps the viewport; reduced-motion settings skip the animation. The
-  placeholder is not a proposed link or observed use.
+  written links and documents then reveal once from a real connected root while
+  the camera settles from close to wide. Selection never reruns the layout.
+  Refreshing unchanged data keeps the viewport; returning to a component restores
+  its camera. Replay is explicit, and reduced-motion settings skip spatial
+  motion. The placeholder is not a proposed link or observed use.
 - Activity: 7/30/90-day UTC records split by all/human/agent attribution. Search,
   exposure, use and usefulness are not one funnel. Daily exact values accompany
   the chart. A bounded newest-first feed below it shows exact attributed
