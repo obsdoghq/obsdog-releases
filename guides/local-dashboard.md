@@ -26,6 +26,12 @@ the existing viewer and reports its running version, Space, start time and
 `restart_required`. It does not open or migrate a Space, scan ports or stop
 any process. An older viewer may not report start time.
 
+For a schema-changing upgrade, follow the
+[backup-first migration guide](local-schema-migration.md) before a writable
+Store open. An old viewer's continued response is not proof of writer
+compatibility. Legacy v0.2.18 MCPs lack a future-schema guard and must be
+disconnected, not just left idle. The migration helper never restarts them.
+
 The existing endpoint is `GET http://127.0.0.1:47777/_obsdog/health`, not
 `/api/version` or `/healthz`. It returns `version`, `channel`, `space_id` and
 `restart_required`; v0.2.19 adds `started_at`. A 404 or untrusted listener is

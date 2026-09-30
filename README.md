@@ -120,6 +120,10 @@ snapshots](releases/v0.2.19.md). Use `obsdog dashboard status` after upgrading.
 Reconnect existing MCP sessions before using the migrated library; passive
 dashboard reads do not migrate it. Schema 11 does not support old-writer
 downgrades. This changes neither ranking weights nor cloud-sync permission.
+Read the [local schema migration guide](guides/local-schema-migration.md)
+before opening an old library with the new CLI. Its inspectable, offline
+helper defaults to a metadata-only check and requires explicit application.
+Legacy v0.2.18 does not refuse future schemas; disconnect its MCP sessions.
 
 v0.2.18 [adapts Graph scale to the map and viewport](releases/v0.2.18.md):
 bounded node/click sizes, representative titles and reversible zoom/Fit retain
