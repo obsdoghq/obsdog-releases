@@ -10,6 +10,10 @@ It does **not** contain the proprietary application source code.
 [Feedback privacy guide](FEEDBACK.md) ·
 [AI-client setup](https://github.com/obsdoghq/skills/blob/main/docs/SETUP.md)
 
+Internal implementation is tracked in Project draft tickets, not duplicate Issues
+or TODO checklists. Public issues remain feedback intake. Follow the feedback
+privacy guide; private release and operations plans remain separate.
+
 ## Quick Start — CLI + AI plugin
 
 On Apple silicon macOS or Linux x64 with Codex or Claude Code already installed,
