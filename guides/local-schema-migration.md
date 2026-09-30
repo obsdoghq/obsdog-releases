@@ -1,4 +1,102 @@
-# Local schema migration: stable 10 → 11
+# Local schema migration
+
+## Next beta: exact stable 11 → 12 (candidate)
+
+This path is prepared for CLI v0.2.20. It is not an instruction to migrate an
+existing library before that release and its separately verified transition
+asset are available. The published v0.2.19 path below remains unchanged.
+
+The next CLI creates new libraries at schema 12 and refuses other unfenced
+schemas **before writable initialization**. It prints the actual and supported
+schema with this guide's link. Normal CLI commands no longer retain or run a
+historical migration chain. Installing a binary is not consent to migrate data.
+Explicitly fenced recovery sources remain read-only.
+
+Schema 12 shares historical chunk payload with immutable revisions and interns
+snapshot titles. Chunk IDs, historical title/content, snapshot membership,
+frozen result pages, events and pending operations remain unchanged. Validated
+dashboard facts are derived locally from retained events; no ranking-policy
+change, sync enrollment, upload or background service is introduced.
+
+### Prepare
+
+1. Use a compatible server archive reader before migrating a connected Space.
+   Local schema and remote sync protocol are different versions.
+2. Keep the verified v0.2.19 executable outside PATH for isolated pre-transition
+   recovery. Do not keep two competing normal CLI installations.
+3. Download `obsdog-migrate_schema11_to12_v0.2.20_darwin_arm64.tar.gz` and
+   `checksums.txt` from the **same immutable release** when published. Verify
+   the archive's SHA-256 before extracting its one `obsdog-migrate` executable.
+   `./obsdog-migrate --version` identifies the reviewed tool build. Do not install
+   it permanently in PATH. No Python or extra database library is required.
+4. Get the exact local ID with `obsdog space list --format json`; it does not
+   open or migrate that library. Pass its canonical directory, not a project
+   path. For the default profile this is `~/.obsdog/spaces/<exact-space-id>`.
+
+Read-only check:
+
+```sh
+./obsdog-migrate --space-directory /absolute/path/to/.obsdog/spaces/spc_EXACT_ID
+```
+
+Check verifies the exact stable schema-11 ledger, identity, integrity and foreign
+keys, and refuses recovery fences. It creates no backup or network request.
+It does not prove that writers are paused or that every transformation check
+will pass; apply also validates chunk/revision agreement and supported consumers.
+
+### Apply and verify
+
+Pause agents and automation using this **same library**, let outstanding work
+finish, stop the owned foreground viewer and disconnect host-owned MCPs in their
+clients. `--writers-paused` acknowledges that step; it is not a process scan or
+an automatic kill. Another device's separate local database needs its own
+transition, not a filesystem-wide process shutdown.
+
+Use a **new** private backup bundle outside the entire source profile. Its parent
+must already exist. Existing output is refused, including on a retry:
+
+```sh
+./obsdog-migrate \
+  --space-directory /absolute/path/to/.obsdog/spaces/spc_EXACT_ID \
+  --backup-dir /absolute/path/outside-the-profile/schema12-backup \
+  --apply --writers-paused
+```
+
+The helper takes consistent SQLite `before.db` and `after.db` snapshots, not a
+live main-file copy that can omit WAL. Both and `receipt.json` and
+`original-row-hashes.json` are private. It reserves a write transaction, checks
+the source has not changed since backup, transforms the exact reviewed objects,
+verifies every original logical table fingerprint and integrity/foreign keys,
+then commits. Unsupported source content or custom chunk consumers cause refusal
+and rollback, not silent normalization. Keep the whole bundle private.
+
+After success, use the new CLI to read a known document and run `obsdog doctor`.
+Use `search --no-observe` for a diagnostic query. Reconnect MCPs and check
+`obsdog_version` inside their connections; restart the owned dashboard with its
+previous flags and check `obsdog dashboard status`. Resume already-authorized
+sync only after these checks. Do not manufacture use or feedback during testing.
+
+### Compatibility and failure
+
+- Current schema-12 writers pass a database compatibility fence. Legacy binaries
+  without a future-schema guard cannot silently write the new physical format,
+  but their errors may lack this modern guide link. Reconnect them; do not bypass
+  the guard or remove ledger versions. This fence is not an authorization system.
+- Fenced history is recovery evidence, not a new normal writable library.
+- Keep partial backups and the receipt on failure. `committed: true` can coexist
+  with a later backup or post-check failure. That is **not** a rollback.
+- The helper never downloads or installs software, syncs, enables cloud storage,
+  stops processes, overwrites outputs, or automatically downgrades.
+- For pre-transition investigation, read `before.db` only with a read-only SQLite
+  connection or a separately reviewed recovery profile. Do not place an old
+  snapshot over live data or run a previous writer on an upgraded library. A
+  downgrade would lose later writes and requires a separate recovery decision.
+
+See [SQLite backup](https://www.sqlite.org/backup.html),
+[VACUUM INTO](https://www.sqlite.org/lang_vacuum.html) and
+[WAL](https://www.sqlite.org/wal.html). The tool embeds its reviewed SQLite runtime.
+
+## Published path: stable 10 → 11
 
 Installing CLI v0.2.19 is different from migrating a Space. The new runtime
 migrates an unfenced schema-10 Space when it opens a writable Store. This includes
