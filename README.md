@@ -63,7 +63,7 @@ obsdog version
 ```
 
 The [official tap](https://github.com/obsdoghq/homebrew-tap) installs the exact
-checksum-pinned v0.2.18 binary and its license notices. If Homebrew requests trust,
+checksum-pinned v0.2.19 binary and its license notices. If Homebrew requests trust,
 review and approve this formula only; whole-tap trust is unnecessary.
 
 ### Standalone installer
@@ -72,8 +72,8 @@ Download the installer and checksum manifest from the same immutable release,
 inspect them, then install:
 
 ```sh
-curl -fL --proto '=https' -o obsdog-install.sh https://github.com/obsdoghq/obsdog-releases/releases/download/v0.2.18/install.sh
-curl -fL --proto '=https' -o obsdog-checksums.txt https://github.com/obsdoghq/obsdog-releases/releases/download/v0.2.18/checksums.txt
+curl -fL --proto '=https' -o obsdog-install.sh https://github.com/obsdoghq/obsdog-releases/releases/download/v0.2.19/install.sh
+curl -fL --proto '=https' -o obsdog-checksums.txt https://github.com/obsdoghq/obsdog-releases/releases/download/v0.2.19/checksums.txt
 shasum -a 256 obsdog-install.sh
 # Compare that hash with the install.sh entry in obsdog-checksums.txt.
 less obsdog-install.sh
@@ -114,6 +114,12 @@ The `lexical/current-v1` baseline preserves source history and recorded evidence
 it does not claim an independently demonstrated hit-rate improvement.
 
 ## What to do after installation
+
+v0.2.19 [exposes running-viewer identity and safely reclaims unobserved derived
+snapshots](releases/v0.2.19.md). Use `obsdog dashboard status` after upgrading.
+Reconnect existing MCP sessions before using the migrated library; passive
+dashboard reads do not migrate it. Schema 11 does not support old-writer
+downgrades. This changes neither ranking weights nor cloud-sync permission.
 
 v0.2.18 [adapts Graph scale to the map and viewport](releases/v0.2.18.md):
 bounded node/click sizes, representative titles and reversible zoom/Fit retain
@@ -158,8 +164,9 @@ and `obsdog dashboard serve` processes; reconnect agent sessions as needed.
 v0.2.8 [prevents accidental duplicate imports and hides deprecated knowledge in
 new searches by default](releases/v0.2.8.md). `document import` is create-only;
 `--fork` is an explicit separate copy, not an update. Use `obsdog doctor` to
-inspect exact duplicate candidates and `--include-deprecated` when auditing
-retired search material.
+inspect exact duplicate candidates and `--include-deprecated` for hidden but
+still-active knowledge. Superseded retired blocks remain absent; inspect their
+exact document ID/history instead. See [hide versus retire](guides/knowledge-care.md#hide-or-retire-a-duplicate).
 
 v0.2.7 [detects an old dashboard left running after a CLI upgrade](releases/v0.2.7.md).
 Stop and rerun `obsdog dashboard serve` after upgrading, then refresh the

@@ -18,6 +18,25 @@ returns and shows restart guidance; a new CLI does not silently reuse an older
 listener. It never kills the process holding a port. A pre-v0.2.7 dashboard
 needs one manual restart to gain detection.
 
+## Check the running version
+
+On CLI v0.2.19+, run `obsdog dashboard status --format json`, adding
+`--port PORT` if you changed the default. It compares this installed CLI with
+the existing viewer and reports its running version, Space, start time and
+`restart_required`. It does not open or migrate a Space, scan ports or stop
+any process. An older viewer may not report start time.
+
+The existing endpoint is `GET http://127.0.0.1:47777/_obsdog/health`, not
+`/api/version` or `/healthz`. It returns `version`, `channel`, `space_id` and
+`restart_required`; v0.2.19 adds `started_at`. A 404 or untrusted listener is
+not proof of the currently installed version. A viewer's restart flag detects
+executable replacement, not whether a newer release exists online.
+
+For a long-running MCP, invoke `obsdog_version` in the **existing client
+connection**. Compare it with `obsdog version` in a fresh shell. Reconnect the
+host-owned session when they differ; do not infer MCP currency from a current
+dashboard. No command automatically terminates user-managed processes.
+
 ## What the UI shows
 
 - Overview: current document/block counts, authored links, actual recorded uses,

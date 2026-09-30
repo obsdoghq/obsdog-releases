@@ -36,6 +36,20 @@ All normal Space selection options apply. No `init` is needed. `care show` is
 read-only; `care record` appends metadata, not document text. MCP exposes only
 `obsdog_care_show` and source/temporal search options, not write tools.
 
+## Hide or retire a duplicate
+
+| Operation | Current blocks | New default search | `--include-deprecated` | Evidence/recovery |
+| --- | --- | --- | --- | --- |
+| Active `lifecycle:state=deprecated` label | Still active | Hidden | Can return hidden active candidates | Exact read/history; change the label through supported policy |
+| `document supersede` | Duplicate blocks retired; canonical unchanged | Retired blocks absent | Still absent | Exact original document ID shows its redirect/history; inspect the Care receipt for conditional recovery |
+
+Supersession is not a stronger search filter: it records an evidence-backed
+canonical replacement without copying content. Do not expect an audit search
+flag to put retired blocks back into the current index. Previously frozen
+pages/traces preserve their original evidence. Neither action deletes history.
+Agents should verify both exact document IDs and the applied Care receipt;
+deferred is not completed retirement.
+
 ## Source JSON
 
 Use real IDs from the read result; this is a template, not a ready-to-submit fact.
