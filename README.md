@@ -12,12 +12,12 @@ It does **not** contain the proprietary application source code.
 
 ## Quick Start — CLI + AI plugin
 
-On Apple silicon macOS with Codex or Claude Code already installed (and Homebrew
-if the CLI is not yet installed),
+On Apple silicon macOS or Linux x64 with Codex or Claude Code already installed,
 run the first-party installer at `https://obsdog.ai/install.sh`. It pins and
 checksum-verifies the public [agent setup helper](scripts/setup-agent.sh),
 which installs/reuses the CLI and then installs the plugin for **one** chosen
-client. For Codex:
+client. A missing CLI uses Homebrew on macOS or the standalone installer on
+Linux. For Codex:
 
 ```sh
 curl -fsSL https://obsdog.ai/install.sh | sh -s -- --client codex
@@ -35,9 +35,9 @@ sh obsdog-agent-install.sh --client codex
 ```
 
 The entry pins the immutable
-[helper source](https://github.com/obsdoghq/obsdog-releases/blob/d64550e384c3ed7c577c26d707f062e847c5985a/scripts/setup-agent.sh)
+[helper source](https://github.com/obsdoghq/obsdog-releases/blob/dd4bd7f3e5dbd220ffbbaf6b976eb2587075c1b7/scripts/setup-agent.sh)
 and its SHA-256; append `--dry-run` to preview actions. It needs network access to
-Homebrew/the plugin marketplace during installation, but local Personal use
+the release downloads/Homebrew/plugin marketplace during installation, but local Personal use
 needs no account or connection. An empty list is normal. In a **fresh agent
 session**, invoke ObsDog `find` to check that the skill loads. The helper does
 not create sample knowledge, sign in, sync, upload, or edit global instructions.
@@ -50,26 +50,23 @@ CLI-only use needs no plugin; use either method below. Installing the
 CLI. The [setup guide](https://github.com/obsdoghq/skills/blob/main/docs/SETUP.md)
 covers optional proactive agent instructions without overwriting global files.
 
-## Linux amd64 support under preparation
+## Linux x64 support
 
-The repository installer/helper now recognizes Linux x86_64 and selects the
-`linux_amd64` standalone archive, without requiring Homebrew. Existing public
-releases, including v0.2.19, remain macOS-only; this change does not publish a
-Linux artifact or change the live website's pinned bootstrap helper. Use the standalone installer `--version` option with an
-explicit future version only after its Linux archive, SPDX SBOM and checksum
-manifest have passed the release gates. Until then, Linux installs cannot
-succeed against the existing default version.
+v0.2.20 is the first public Linux release. Linux x86_64 uses the
+`linux_amd64` standalone archive and needs no Homebrew. Each supported platform
+has its own SPDX SBOM; the shared checksum manifest covers both archives and
+all release metadata. Earlier releases, including v0.2.19, are macOS-only.
 
 Local Personal use and stdio MCP need no account or GUI. Cloud login/sync needs
 an unlocked Linux Secret Service keyring over D-Bus; headless environments may
 not provide one. No plaintext credential fallback is enabled.
 
-## CLI free beta — Apple silicon macOS
+## CLI free beta — Apple silicon macOS and Linux x64
 
 No account or GitHub login is required for local use. Choose **one** installation
-method: Homebrew or the standalone installer.
+method: Homebrew on macOS, or the standalone installer on either platform.
 
-### Homebrew
+### Homebrew — Apple silicon macOS
 
 ```sh
 brew install obsdoghq/tap/obsdog
@@ -77,7 +74,7 @@ obsdog version
 ```
 
 The [official tap](https://github.com/obsdoghq/homebrew-tap) installs the exact
-checksum-pinned v0.2.19 binary and its license notices. If Homebrew requests trust,
+checksum-pinned v0.2.20 binary and its license notices. If Homebrew requests trust,
 review and approve this formula only; whole-tap trust is unnecessary.
 
 ### Standalone installer
@@ -86,9 +83,13 @@ Download the installer and checksum manifest from the same immutable release,
 inspect them, then install:
 
 ```sh
-curl -fL --proto '=https' -o obsdog-install.sh https://github.com/obsdoghq/obsdog-releases/releases/download/v0.2.19/install.sh
-curl -fL --proto '=https' -o obsdog-checksums.txt https://github.com/obsdoghq/obsdog-releases/releases/download/v0.2.19/checksums.txt
-shasum -a 256 obsdog-install.sh
+curl -fL --proto '=https' -o obsdog-install.sh https://github.com/obsdoghq/obsdog-releases/releases/download/v0.2.20/install.sh
+curl -fL --proto '=https' -o obsdog-checksums.txt https://github.com/obsdoghq/obsdog-releases/releases/download/v0.2.20/checksums.txt
+if command -v sha256sum >/dev/null 2>&1; then
+  sha256sum obsdog-install.sh
+else
+  shasum -a 256 obsdog-install.sh
+fi
 # Compare that hash with the install.sh entry in obsdog-checksums.txt.
 less obsdog-install.sh
 sh obsdog-install.sh --dry-run
@@ -99,7 +100,7 @@ obsdog --help
 obsdog --licenses
 ```
 
-The installer verifies the binary archive checksum and version before replacing
+The installer selects the OS/CPU, then verifies the binary archive checksum and version before replacing
 only `~/.local/bin/obsdog`. It does not modify project files or knowledge data.
 An optional `--install-dir /absolute/path` selects another standalone location.
 SHA-256 verifies integrity against the release manifest; it is not an Apple
@@ -107,8 +108,8 @@ notarization ticket or an independent publisher signature.
 
 The release includes the binary license, third-party notices, SPDX inventory,
 source revision identifier, and checksum manifest. These terminal CLI archives
-are not the notarized macOS desktop application. Intel macOS, Windows, Linux
-and a public macOS app download are not offered by this release. v0.2.0 removes
+are not the notarized macOS desktop application. Intel macOS, Linux ARM64,
+Windows and a public macOS app download are not offered by this release. v0.2.0 removes
 project initialization and path-based Space selection. It retains explicit AI authorship, history-preserving Personal
 adoption and current hosted OAuth compatibility. It adds revision-bound source
 declarations, authoring reviews and source/temporal filters. Connected care writes
@@ -128,6 +129,14 @@ The `lexical/current-v1` baseline preserves source history and recorded evidence
 it does not claim an independently demonstrated hit-rate improvement.
 
 ## What to do after installation
+
+v0.2.20 [adds Linux x64 binaries and the matching agent setup path](releases/v0.2.20.md).
+It uses the same product code and schema 11 as v0.2.19, with no additional
+schema migration, ranking change or cloud-sync opt-in. Homebrew installations
+update with `brew upgrade obsdoghq/tap/obsdog`; standalone installations use
+`obsdog update`. Restart owned dashboards and reconnect existing MCP sessions
+after upgrading. Review the [agent update checklist](https://github.com/obsdoghq/skills/blob/main/docs/SETUP.md#updating-cli-and-agent-guidance),
+including the ObsDog section of AGENTS.md / CLAUDE.md; never overwrite unrelated instructions.
 
 v0.2.19 [exposes running-viewer identity and safely reclaims unobserved derived
 snapshots](releases/v0.2.19.md). Use `obsdog dashboard status` after upgrading.
@@ -318,4 +327,3 @@ Before publishing changes, run `python3 -m unittest discover -s tests` and
 `python3 scripts/check_public_content.py`. These checks flag common accidental
 internal details without printing matched values. They supplement review and
 do not certify historical commits, remote release metadata or binary contents.
-
