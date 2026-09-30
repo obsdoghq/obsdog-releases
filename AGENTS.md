@@ -1,5 +1,10 @@
 # Distribution repository
 
+- Use Project draft tickets for internal work and verification, not duplicate
+  repository Issues or TODO.md checklists. Public Issues remain feedback intake.
+  Never copy private task bodies, access details or deployment
+  evidence into this public repository. Source CI is not binary publication.
+
 - Keep this repository limited to public download documentation, metadata and
   narrowly scoped public installation helpers; no application implementation.
 - Never copy proprietary source, deployment configuration, credentials or user data here.
