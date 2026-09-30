@@ -57,6 +57,14 @@ v0.2.20 is the first public Linux release. Linux x86_64 uses the
 has its own SPDX SBOM; the shared checksum manifest covers both archives and
 all release metadata. Earlier releases, including v0.2.19, are macOS-only.
 
+The read-only **Verify published Linux installation** workflow runs on a
+GitHub-hosted Linux runner after publication. It downloads the exact public
+installer and checksum manifest without authentication, verifies a fresh
+install in a temporary profile, and checks local knowledge and the public
+updater. It neither builds nor publishes binaries. Run it with the current
+stable release version; a first Linux install is not a historical macOS
+retained-data upgrade test.
+
 Local Personal use and stdio MCP need no account or GUI. Cloud login/sync needs
 an unlocked Linux Secret Service keyring over D-Bus; headless environments may
 not provide one. No plaintext credential fallback is enabled.

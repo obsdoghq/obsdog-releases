@@ -1,0 +1,31 @@
+name: Verify published Linux installation
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Current published stable release
+        required: true
+        type: string
+        default: v0.2.20
+  pull_request:
+    paths:
+      - .github/workflows/published-install.yml
+      - scripts/test-published-linux.sh
+      - tests/fixtures/linux-install.md
+
+permissions:
+  contents: read
+
+jobs:
+  published-install:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - name: Verify anonymous installer, local knowledge and updater
+        run: bash scripts/test-published-linux.sh "$RELEASE_VERSION"
+        env:
+          RELEASE_VERSION: ${{ inputs.version || 'v0.2.20' }}
