@@ -64,6 +64,69 @@ class SetupAgentTests(unittest.TestCase):
     def _calls(self):
         return self.log.read_text() if self.log.exists() else ""
 
+    def _linux(self):
+        self._stub("uname", '#!/bin/sh\n[ "$1" = "-s" ] && echo Linux || echo x86_64\n')
+        (self.bin / "brew").unlink()
+        self._stub("curl", '''#!/bin/sh
+set -eu
+printf 'curl %s\\n' "$*" >> "$SETUP_LOG"
+[ "${FAIL_DOWNLOAD:-}" != yes ] || exit 22
+output= url=
+while [ "$#" -gt 0 ]; do
+  case "$1" in --output) output=$2; shift 2 ;; https://*) url=$1; shift ;; *) shift ;; esac
+done
+[ "$url" = https://raw.githubusercontent.com/obsdoghq/obsdog-releases/main/install.sh ]
+cat > "$output" <<'INSTALLER'
+#!/bin/sh
+set -eu
+printf 'standalone %s\\n' "$*" >> "$SETUP_LOG"
+[ "${FAIL_INSTALL:-}" != yes ] || exit 65
+[ "$1" = --install-dir ]
+mkdir -p "$2"
+cp "$SETUP_BIN/obsdog_new" "$2/obsdog"
+INSTALLER
+''')
+        return {"OBSDOG_INSTALL_DIR": str(Path(self.temporary.name) / "local bin")}
+
+    def test_linux_missing_cli_uses_standalone_without_brew(self):
+        env = self._linux()
+        result = self._run("--client", "codex", env=env)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("standalone --install-dir", self._calls())
+        self.assertIn("codex plugin add", self._calls())
+        self.assertNotIn("brew", self._calls())
+        self.assertIn("PATH", result.stdout)
+        self.assertTrue((Path(env["OBSDOG_INSTALL_DIR"]) / "obsdog").is_file())
+
+    def test_linux_dry_run_does_not_download_or_install(self):
+        env = self._linux()
+        result = self._run("--client", "claude", "--dry-run", env=env)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("standalone", result.stdout)
+        self.assertEqual(self._calls(), "")
+        self.assertFalse(Path(env["OBSDOG_INSTALL_DIR"]).exists())
+
+    def test_linux_existing_cli_skips_download(self):
+        env = self._linux()
+        self._stub("obsdog", '#!/bin/sh\necho v0.2.19\n')
+        result = self._run("--client", "claude", env=env)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertNotIn("curl", self._calls())
+
+    def test_linux_download_or_install_failure_stops_before_plugin(self):
+        env = self._linux()
+        for failure in ("FAIL_DOWNLOAD", "FAIL_INSTALL"):
+            self.log.unlink(missing_ok=True)
+            result = self._run("--client", "codex", env={**env, failure: "yes"})
+            self.assertEqual(result.returncode, 70, result.stderr)
+            self.assertNotIn("codex", self._calls())
+
+    def test_linux_relative_install_directory_is_rejected(self):
+        self._linux()
+        result = self._run("--client", "codex", env={"OBSDOG_INSTALL_DIR": "relative"})
+        self.assertEqual(result.returncode, 64)
+        self.assertEqual(self._calls(), "")
+
     def test_codex_existing_cli_refreshes_marketplace_without_brew(self):
         self._stub("obsdog", '#!/bin/sh\necho v0.2.5\n')
         result = self._run("--client", "codex")
@@ -129,3 +192,4 @@ class SetupAgentTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
