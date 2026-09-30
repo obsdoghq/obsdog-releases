@@ -10,7 +10,7 @@ usage() {
   cat <<'EOF'
 Usage: install.sh [--version vMAJOR.MINOR.PATCH] [--install-dir DIRECTORY] [--dry-run]
 
-Installs a checksum-verified ObsDog free beta for Apple silicon macOS.
+Installs a checksum-verified ObsDog free beta for Apple silicon macOS or Linux x86_64.
 No GitHub login is needed. The installer never changes Space data.
 License and third-party notices are available with: obsdog --licenses
 EOF
@@ -44,8 +44,11 @@ while [ "$#" -gt 0 ]; do
   esac
 done
 
-[ "$(uname -s)" = Darwin ] || { echo "free beta artifacts support macOS only" >&2; exit 69; }
-[ "$(uname -m)" = arm64 ] || { echo "free beta artifacts support Apple silicon only" >&2; exit 69; }
+case "$(uname -s)/$(uname -m)" in
+  Darwin/arm64) platform=darwin_arm64 ;;
+  Linux/x86_64|Linux/amd64) platform=linux_amd64 ;;
+  *) echo "release artifacts support Apple silicon macOS and Linux x86_64 only" >&2; exit 69 ;;
+esac
 case "$install_dir" in
   /*) ;;
   *) echo "--install-dir must be an absolute path" >&2; exit 64 ;;
@@ -53,9 +56,21 @@ esac
 [ ! -L "$install_dir" ] || { echo "refusing a symlinked install directory" >&2; exit 73; }
 [ ! -e "$install_dir" ] || [ -d "$install_dir" ] || { echo "install directory is not a directory" >&2; exit 73; }
 
-for command in curl mktemp tar shasum awk uname; do
+for command in curl mktemp tar awk uname; do
   command -v "$command" >/dev/null 2>&1 || { echo "required command is missing: $command" >&2; exit 69; }
 done
+
+if command -v sha256sum >/dev/null 2>&1; then
+  checksum_tool=sha256sum
+elif command -v shasum >/dev/null 2>&1; then
+  checksum_tool=shasum
+else
+  echo "required command is missing: sha256sum or shasum" >&2
+  exit 69
+fi
+sha256() {
+  if [ "$checksum_tool" = sha256sum ]; then sha256sum "$1"; else shasum -a 256 "$1"; fi
+}
 
 case "$version" in
   v[0-9]*.[0-9]*.[0-9]*) ;;
@@ -74,7 +89,7 @@ cleanup() {
 }
 trap cleanup EXIT HUP INT TERM
 
-archive_name="obsdog_${version}_darwin_arm64.tar.gz"
+archive_name="obsdog_${version}_${platform}.tar.gz"
 for asset in "$archive_name" checksums.txt; do
   curl --fail --silent --show-error --location --proto '=https' --tlsv1.2 \
     --connect-timeout 10 --max-time 120 --max-filesize 67108864 \
@@ -95,7 +110,7 @@ case "$expected" in
   *[!0-9A-Fa-f]*|'') echo "checksum manifest contains an invalid SHA-256 value" >&2; exit 65 ;;
 esac
 [ "${#expected}" -eq 64 ] || { echo "checksum manifest contains an invalid SHA-256 value" >&2; exit 65; }
-actual=$(shasum -a 256 "$archive" | awk '{print $1}')
+actual=$(sha256 "$archive" | awk '{print $1}')
 [ "$actual" = "$expected" ] || { echo "release archive checksum does not match checksums.txt" >&2; exit 65; }
 
 entries=$(tar -tzf "$archive")
@@ -131,3 +146,4 @@ chmod 755 "$install_temporary"
 mv -f "$install_temporary" "$destination"
 install_temporary=
 echo "installed $version at $destination"
+

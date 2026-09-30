@@ -50,6 +50,20 @@ CLI-only use needs no plugin; use either method below. Installing the
 CLI. The [setup guide](https://github.com/obsdoghq/skills/blob/main/docs/SETUP.md)
 covers optional proactive agent instructions without overwriting global files.
 
+## Linux amd64 support under preparation
+
+The repository installer/helper now recognizes Linux x86_64 and selects the
+`linux_amd64` standalone archive, without requiring Homebrew. Existing public
+releases, including v0.2.19, remain macOS-only; this change does not publish a
+Linux artifact or change the live website's pinned bootstrap helper. Use the standalone installer `--version` option with an
+explicit future version only after its Linux archive, SPDX SBOM and checksum
+manifest have passed the release gates. Until then, Linux installs cannot
+succeed against the existing default version.
+
+Local Personal use and stdio MCP need no account or GUI. Cloud login/sync needs
+an unlocked Linux Secret Service keyring over D-Bus; headless environments may
+not provide one. No plaintext credential fallback is enabled.
+
 ## CLI free beta — Apple silicon macOS
 
 No account or GitHub login is required for local use. Choose **one** installation
@@ -304,3 +318,4 @@ Before publishing changes, run `python3 -m unittest discover -s tests` and
 `python3 scripts/check_public_content.py`. These checks flag common accidental
 internal details without printing matched values. They supplement review and
 do not certify historical commits, remote release metadata or binary contents.
+
