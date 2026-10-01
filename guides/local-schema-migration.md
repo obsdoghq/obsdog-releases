@@ -113,12 +113,12 @@ Schema 11 adds derived search-snapshot retention and run-eligibility structures.
 It does not change document IDs, original revisions or ranking weights. It does
 not sign in, enable sync, prepare structural Care or publish knowledge.
 
-**Beta policy being prepared:** a future current CLI should refuse an unsupported
-older local schema with its actual/supported versions and this guide's link,
-rather than retain an indefinite historical upgrade chain. Migration belongs
-in a reviewed version-specific helper. That policy has not shipped yet:
-v0.2.19 still performs its published automatic migration. Its immutable binary
-is the transition runtime for this guide; this helper does not change it.
+**Historical runtime behavior:** the immutable v0.2.19 binary still performs
+its published automatic 10 → 11 migration. The separately prepared v0.2.22
+runtime instead refuses unsupported schemas and uses the version-specific
+11 → 12 tool described above. That newer policy does not retroactively change
+v0.2.19 or this historical helper. Use each helper only with its exact documented
+source schema and runtime versions.
 
 ## Compatibility
 

@@ -309,7 +309,7 @@ an evaluation question, not a claim established by shipping this policy.
 
 Guarded cloud signup is open for controlled beta testing at
 [ObsDog App](https://app.obsdog.ai). Limits are one Personal Space,
-three active device sessions, 100 MiB retained cloud data and 10,000 new sync
+three active device sessions, 500 MiB retained cloud data and 10,000 new sync
 operations per UTC month, initially up to 100 hosted accounts. History and sync
 copies count toward cloud storage; these are not quotas on local files.
 There is no checkout, hosted AI credit, or automatic paid conversion.
