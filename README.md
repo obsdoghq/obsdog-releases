@@ -69,9 +69,11 @@ updater. It neither builds nor publishes binaries. Run it with the current
 stable release version; a first Linux install is not a historical macOS
 retained-data upgrade test.
 
-Local Personal use and stdio MCP need no account or GUI. Cloud login/sync needs
-an unlocked Linux Secret Service keyring over D-Bus; headless environments may
-not provide one. No plaintext credential fallback is enabled.
+Local Personal use and stdio MCP need no account or GUI. Cloud login/sync uses
+an unlocked Linux Secret Service keyring over D-Bus by default. v0.2.21 adds an
+explicit, independently keyed encrypted-file choice when that service is absent;
+see [Linux cloud login](guides/linux-cloud-login.md). No automatic or plaintext
+credential fallback is enabled.
 
 ## CLI free beta — Apple silicon macOS and Linux x64
 
@@ -86,7 +88,7 @@ obsdog version
 ```
 
 The [official tap](https://github.com/obsdoghq/homebrew-tap) installs the exact
-checksum-pinned v0.2.20 binary and its license notices. If Homebrew requests trust,
+checksum-pinned v0.2.21 binary and its license notices. If Homebrew requests trust,
 review and approve this formula only; whole-tap trust is unnecessary.
 
 ### Standalone installer
@@ -95,8 +97,8 @@ Download the installer and checksum manifest from the same immutable release,
 inspect them, then install:
 
 ```sh
-curl -fL --proto '=https' -o obsdog-install.sh https://github.com/obsdoghq/obsdog-releases/releases/download/v0.2.20/install.sh
-curl -fL --proto '=https' -o obsdog-checksums.txt https://github.com/obsdoghq/obsdog-releases/releases/download/v0.2.20/checksums.txt
+curl -fL --proto '=https' -o obsdog-install.sh https://github.com/obsdoghq/obsdog-releases/releases/download/v0.2.21/install.sh
+curl -fL --proto '=https' -o obsdog-checksums.txt https://github.com/obsdoghq/obsdog-releases/releases/download/v0.2.21/checksums.txt
 if command -v sha256sum >/dev/null 2>&1; then
   sha256sum obsdog-install.sh
 else
@@ -141,6 +143,11 @@ The `lexical/current-v1` baseline preserves source history and recorded evidence
 it does not claim an independently demonstrated hit-rate improvement.
 
 ## What to do after installation
+
+v0.2.21 [adds explicit encrypted credential storage for Linux without a keyring](releases/v0.2.21.md).
+The OS store remains the default; separately provision the key and approve cloud
+login only if you choose that backend. Schema 11, local knowledge, search and
+history are unchanged. Installing does not sign in or upload data.
 
 v0.2.20 [adds Linux x64 binaries and the matching agent setup path](releases/v0.2.20.md).
 It uses the same product code and schema 11 as v0.2.19, with no additional
