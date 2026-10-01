@@ -2,9 +2,11 @@
 
 ## Next beta: exact stable 11 → 12 (candidate)
 
-This path is prepared for CLI v0.2.20. It is not an instruction to migrate an
+This path is prepared for CLI v0.2.22. It is not an instruction to migrate an
 existing library before that release and its separately verified transition
-asset are available. The published v0.2.19 path below remains unchanged.
+assets are available. Published v0.2.21 still uses schema 11; its installation
+does not perform the transition described here. The historical v0.2.19 path
+below remains unchanged.
 
 The next CLI creates new libraries at schema 12 and refuses other unfenced
 schemas **before writable initialization**. It prints the actual and supported
@@ -22,10 +24,13 @@ change, sync enrollment, upload or background service is introduced.
 
 1. Use a compatible server archive reader before migrating a connected Space.
    Local schema and remote sync protocol are different versions.
-2. Keep the verified v0.2.19 executable outside PATH for isolated pre-transition
+2. Keep the verified v0.2.21 executable outside PATH for isolated pre-transition
    recovery. Do not keep two competing normal CLI installations.
-3. Download `obsdog-migrate_schema11_to12_v0.2.20_darwin_arm64.tar.gz` and
-   `checksums.txt` from the **same immutable release** when published. Verify
+3. Download the migration archive for **your platform** and `checksums.txt`
+   from the **same immutable v0.2.22 release** when published:
+   `obsdog-migrate_schema11_to12_v0.2.22_darwin_arm64.tar.gz` on Apple silicon
+   macOS, or `obsdog-migrate_schema11_to12_v0.2.22_linux_amd64.tar.gz` on Linux
+   x86_64. Each archive has a packaged-binary SPDX SBOM in the same manifest. Verify
    the archive's SHA-256 before extracting its one `obsdog-migrate` executable.
    `./obsdog-migrate --version` identifies the reviewed tool build. Do not install
    it permanently in PATH. No Python or extra database library is required.
