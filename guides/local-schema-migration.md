@@ -1,14 +1,13 @@
 # Local schema migration
 
-## Next beta: exact stable 11 → 12 (candidate)
+## Published path: exact stable 11 → 12
 
-This path is prepared for CLI v0.2.22. It is not an instruction to migrate an
-existing library before that release and its separately verified transition
-assets are available. Published v0.2.21 still uses schema 11; its installation
-does not perform the transition described here. The historical v0.2.19 path
-below remains unchanged.
+Use CLI v0.2.22 and the separately verified transition assets from its same
+immutable release. Do not migrate a library with a candidate or mismatched tool.
+Historical v0.2.21 uses schema 11; its installation does not perform this
+transition. The historical v0.2.19 path below remains unchanged.
 
-The next CLI creates new libraries at schema 12 and refuses other unfenced
+CLI v0.2.22 creates new libraries at schema 12 and refuses other unfenced
 schemas **before writable initialization**. It prints the actual and supported
 schema with this guide's link. Normal CLI commands no longer retain or run a
 historical migration chain. Installing a binary is not consent to migrate data.
@@ -20,14 +19,19 @@ frozen result pages, events and pending operations remain unchanged. Validated
 dashboard facts are derived locally from retained events; no ranking-policy
 change, sync enrollment, upload or background service is introduced.
 
+This read-oriented beta format is not a promise of faster writes or smaller WAL
+files. Allow free space for the live database, temporary WAL and both consistent
+backup snapshots. Do not delete live WAL/SHM files or downgrade an upgraded
+library to reclaim space. See the [release scope and limits](../releases/v0.2.22.md#cost-and-scope).
+
 ### Prepare
 
-1. Use a compatible server archive reader before migrating a connected Space.
+1. Use a compatible server archive reader (v0.1.36 or newer) before migrating a connected Space.
    Local schema and remote sync protocol are different versions.
 2. Keep the verified v0.2.21 executable outside PATH for isolated pre-transition
    recovery. Do not keep two competing normal CLI installations.
 3. Download the migration archive for **your platform** and `checksums.txt`
-   from the **same immutable v0.2.22 release** when published:
+   from the **same immutable v0.2.22 release**:
    `obsdog-migrate_schema11_to12_v0.2.22_darwin_arm64.tar.gz` on Apple silicon
    macOS, or `obsdog-migrate_schema11_to12_v0.2.22_linux_amd64.tar.gz` on Linux
    x86_64. Each archive has a packaged-binary SPDX SBOM in the same manifest. Verify
@@ -114,7 +118,7 @@ It does not change document IDs, original revisions or ranking weights. It does
 not sign in, enable sync, prepare structural Care or publish knowledge.
 
 **Historical runtime behavior:** the immutable v0.2.19 binary still performs
-its published automatic 10 → 11 migration. The separately prepared v0.2.22
+its published automatic 10 → 11 migration. The v0.2.22
 runtime instead refuses unsupported schemas and uses the version-specific
 11 → 12 tool described above. That newer policy does not retroactively change
 v0.2.19 or this historical helper. Use each helper only with its exact documented

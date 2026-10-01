@@ -88,7 +88,7 @@ obsdog version
 ```
 
 The [official tap](https://github.com/obsdoghq/homebrew-tap) installs the exact
-checksum-pinned v0.2.21 binary and its license notices. If Homebrew requests trust,
+checksum-pinned v0.2.22 binary and its license notices. If Homebrew requests trust,
 review and approve this formula only; whole-tap trust is unnecessary.
 
 ### Standalone installer
@@ -97,8 +97,8 @@ Download the installer and checksum manifest from the same immutable release,
 inspect them, then install:
 
 ```sh
-curl -fL --proto '=https' -o obsdog-install.sh https://github.com/obsdoghq/obsdog-releases/releases/download/v0.2.21/install.sh
-curl -fL --proto '=https' -o obsdog-checksums.txt https://github.com/obsdoghq/obsdog-releases/releases/download/v0.2.21/checksums.txt
+curl -fL --proto '=https' -o obsdog-install.sh https://github.com/obsdoghq/obsdog-releases/releases/download/v0.2.22/install.sh
+curl -fL --proto '=https' -o obsdog-checksums.txt https://github.com/obsdoghq/obsdog-releases/releases/download/v0.2.22/checksums.txt
 if command -v sha256sum >/dev/null 2>&1; then
   sha256sum obsdog-install.sh
 else
@@ -143,6 +143,16 @@ The `lexical/current-v1` baseline preserves source history and recorded evidence
 it does not claim an independently demonstrated hit-rate improvement.
 
 ## What to do after installation
+
+v0.2.22 [adds shared historical storage and local dashboard facts](releases/v0.2.22.md).
+New libraries use schema 12. **Existing schema-11 libraries need the separate,
+backup-first transition tool**; installing the CLI does not migrate them, and
+normal commands refuse unsupported schemas before writable initialization.
+Read the [exact 11 → 12 migration guide](guides/local-schema-migration.md)
+before replacing a runtime used by an existing library. Pause only its writers,
+keep private consistent backups, reconnect its MCPs and restart its dashboard.
+This read-oriented beta retains write/WAL costs; it is not a guarantee of faster
+writes, smaller temporary WAL files or improved retrieval quality.
 
 v0.2.21 [adds explicit encrypted credential storage for Linux without a keyring](releases/v0.2.21.md).
 The OS store remains the default; separately provision the key and approve cloud
