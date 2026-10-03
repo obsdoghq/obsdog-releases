@@ -2,12 +2,12 @@
 
 ## Published path: exact stable 11 → 12
 
-Use CLI v0.2.23 and the separately verified transition assets from its same
+Use CLI v0.2.24 and the separately verified transition assets from its same
 immutable release. Do not migrate a library with a candidate or mismatched tool.
 Historical v0.2.21 uses schema 11; its installation does not perform this
 transition. The historical v0.2.19 path below remains unchanged.
 
-CLI v0.2.23 preserves v0.2.22's schema 12. An already-transitioned schema-12
+CLI v0.2.24 preserves v0.2.22's schema 12. An already-transitioned schema-12
 library needs no repeat migration. It creates new libraries at schema 12 and refuses other unfenced
 schemas **before writable initialization**. It prints the actual and supported
 schema with this guide's link. Normal CLI commands no longer retain or run a
@@ -32,9 +32,9 @@ library to reclaim space. See the [release scope and limits](../releases/v0.2.22
 2. Keep the verified v0.2.21 executable outside PATH for isolated pre-transition
    recovery. Do not keep two competing normal CLI installations.
 3. Download the migration archive for **your platform** and `checksums.txt`
-   from the **same immutable v0.2.23 release**:
-   `obsdog-migrate_schema11_to12_v0.2.23_darwin_arm64.tar.gz` on Apple silicon
-   macOS, or `obsdog-migrate_schema11_to12_v0.2.23_linux_amd64.tar.gz` on Linux
+   from the **same immutable v0.2.24 release**:
+   `obsdog-migrate_schema11_to12_v0.2.24_darwin_arm64.tar.gz` on Apple silicon
+   macOS, or `obsdog-migrate_schema11_to12_v0.2.24_linux_amd64.tar.gz` on Linux
    x86_64. Each archive has a packaged-binary SPDX SBOM in the same manifest. Verify
    the archive's SHA-256 before extracting its one `obsdog-migrate` executable.
    `./obsdog-migrate --version` identifies the reviewed tool build. Do not install
