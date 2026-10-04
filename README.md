@@ -88,7 +88,7 @@ obsdog version
 ```
 
 The [official tap](https://github.com/obsdoghq/homebrew-tap) installs the exact
-checksum-pinned v0.2.24 binary and its license notices. If Homebrew requests trust,
+checksum-pinned v0.2.25 binary and its license notices. If Homebrew requests trust,
 review and approve this formula only; whole-tap trust is unnecessary.
 
 ### Standalone installer
@@ -97,8 +97,8 @@ Download the installer and checksum manifest from the same immutable release,
 inspect them, then install:
 
 ```sh
-curl -fL --proto '=https' -o obsdog-install.sh https://github.com/obsdoghq/obsdog-releases/releases/download/v0.2.24/install.sh
-curl -fL --proto '=https' -o obsdog-checksums.txt https://github.com/obsdoghq/obsdog-releases/releases/download/v0.2.24/checksums.txt
+curl -fL --proto '=https' -o obsdog-install.sh https://github.com/obsdoghq/obsdog-releases/releases/download/v0.2.25/install.sh
+curl -fL --proto '=https' -o obsdog-checksums.txt https://github.com/obsdoghq/obsdog-releases/releases/download/v0.2.25/checksums.txt
 if command -v sha256sum >/dev/null 2>&1; then
   sha256sum obsdog-install.sh
 else
@@ -143,6 +143,11 @@ The `lexical/current-v1` baseline preserves source history and recorded evidence
 it does not claim an independently demonstrated hit-rate improvement.
 
 ## What to do after installation
+
+v0.2.25 [recovers verified original ancestry during sync pull](releases/v0.2.25.md)
+when historical retrieval revisions are missing on a receiving device. It
+preserves schema 12 and pending work. Retained retrieval history does not
+replace current content.
 
 v0.2.24 [adds bounded sync-page recovery, identifier navigation hints and prior
 standalone executable retention](releases/v0.2.24.md). Schema 12, recorded
