@@ -2,7 +2,7 @@
 set -eu
 
 repository=obsdoghq/obsdog-releases
-version=v0.2.25
+version=v0.2.26
 install_dir=${OBSDOG_INSTALL_DIR:-"${HOME:?}/.local/bin"}
 dry_run=false
 
