@@ -88,7 +88,8 @@ obsdog version
 ```
 
 The [official tap](https://github.com/obsdoghq/homebrew-tap) installs the exact
-checksum-pinned v0.2.26 binary and its license notices. If Homebrew requests trust,
+checksum-pinned CLI binary and its license notices. Check `obsdog version` after
+installation or upgrade. If Homebrew requests trust,
 review and approve this formula only; whole-tap trust is unnecessary.
 
 ### Standalone installer
