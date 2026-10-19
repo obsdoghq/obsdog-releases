@@ -98,8 +98,8 @@ Download the installer and checksum manifest from the same immutable release,
 inspect them, then install:
 
 ```sh
-curl -fL --proto '=https' -o obsdog-install.sh https://github.com/obsdoghq/obsdog-releases/releases/download/v0.2.27/install.sh
-curl -fL --proto '=https' -o obsdog-checksums.txt https://github.com/obsdoghq/obsdog-releases/releases/download/v0.2.27/checksums.txt
+curl -fL --proto '=https' -o obsdog-install.sh https://github.com/obsdoghq/obsdog-releases/releases/download/v0.2.28/install.sh
+curl -fL --proto '=https' -o obsdog-checksums.txt https://github.com/obsdoghq/obsdog-releases/releases/download/v0.2.28/checksums.txt
 if command -v sha256sum >/dev/null 2>&1; then
   sha256sum obsdog-install.sh
 else
@@ -144,6 +144,12 @@ The `lexical/current-v1` baseline preserves source history and recorded evidence
 it does not claim an independently demonstrated hit-rate improvement.
 
 ## What to do after installation
+
+v0.2.28 [clarifies feedback rubrics and import collision diagnostics](releases/v0.2.28.md).
+Use `obsdog feedback add --help` for the allowed values and exact opened/used-hit
+requirements. A refused import identifies source-path, current-content-hash or
+both matches; inspect the existing document before choosing an update, a
+confirmed unrelated source file or an intentional fork.
 
 v0.2.27 [fixes existing-history transfer from current libraries and exact-plan
 retry](releases/v0.2.27.md). It preserves schema 12 and existing history.
