@@ -26,6 +26,18 @@ shrinkage. Local Apply is limited to never-synchronized stores without imported
 or maintenance history that needs a connected recovery checkpoint. Do not remove
 that history to bypass the guard.
 
+## Cold recovery and original partial history
+
+Use v0.2.30 or later for cold recovery. Matching built-in label definitions may
+have different local creation times or descriptions; those differences do not
+change their semantic identity. Conflicting definitions still stop recovery.
+
+Some early history contains original events/evaluations without stored search
+run, result or index details. Recovery preserves these as partial records, with
+the original reference IDs and explicit missing evidence. It does not invent a
+query, result, index or observation. `sync pull` reports the partial-record count;
+`trace show --run RUN_ID` explains the unavailable evidence.
+
 ## Offline edits
 
 ```sh
