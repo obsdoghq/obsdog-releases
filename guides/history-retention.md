@@ -58,3 +58,7 @@ export, not a signed portable authorization. Obtain it anew for each restore;
 do not substitute an older file. Keep recovery files private and retain them only
 for the recovery session. The backup itself follows its separate retention
 schedule. Restore never fabricates a search, a use or an evaluation.
+
+A legacy base revision may refer to an unavailable ancestor. History preserves
+that original ID and reports the boundary. Affected documents stay protected
+until their complete history can be verified; recovery never invents a parent.
