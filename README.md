@@ -94,16 +94,16 @@ review and approve this formula only; whole-tap trust is unnecessary.
 
 ### Standalone installer
 
-Download the installer and checksum manifest from the same immutable release,
-inspect them, then install:
-
-```sh
 v0.2.30 improves [cold recovery](releases/v0.2.30.md) for retention-enabled Spaces,
 including existing built-in labels and original partial history. Current links
 remain usable, original observations keep their identities, and expired full
 bodies are explicitly unavailable.
 See the [history and recovery guide](guides/history-retention.md).
 
+Download the installer and checksum manifest from the same immutable release,
+inspect them, then install:
+
+```sh
 curl -fL --proto '=https' -o obsdog-install.sh https://github.com/obsdoghq/obsdog-releases/releases/download/v0.2.30/install.sh
 curl -fL --proto '=https' -o obsdog-checksums.txt https://github.com/obsdoghq/obsdog-releases/releases/download/v0.2.30/checksums.txt
 if command -v sha256sum >/dev/null 2>&1; then
