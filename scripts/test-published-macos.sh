@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-set -euo pipefail
+set -Eeuo pipefail
+trap 'printf "Published macOS verification failed at line %s\n" "$LINENO" >&2' ERR
 expected="${1:?Pass the published stable version}"
 [[ "$expected" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]] || exit 65
 [[ "$(uname -s)/$(uname -m)" == Darwin/arm64 ]] || exit 69
@@ -26,14 +27,19 @@ fetch_installer v0.2.30 "$temporary/previous"
 sh "$temporary/previous/install.sh" --install-dir "$temporary/retained"
 cli="$temporary/retained/obsdog"
 [[ "$("$cli" version)" == v0.2.30 ]]
+printf 'Previous executable version verified.\n'
 "$cli" space default --ensure --format json > "$temporary/space.json"
+printf 'Previous local profile initialized.\n'
 printf '# Synthetic retained evidence\n\nComet knowledge survives an update.\n' > "$temporary/note.md"
 "$cli" document import --file "$temporary/note.md" --format json > "$temporary/import.json"
+printf 'Retained fixture imported.\n'
 document_id="$(jq -er '.data.document.document_id' "$temporary/import.json")"
 "$cli" document read --id "$document_id" --format json > "$temporary/before.json"
 jq -e '.ok and (.data.markdown | length) > 0 and (.data.document.current_revision_id | length) > 0' "$temporary/before.json" >/dev/null
-"$cli" update --check --format json | jq -e --arg version "$expected" \
-  '.ok and .data.latest_version == $version and .data.update_available == true' >/dev/null
+printf 'Previous document body and revision verified.\n'
+"$cli" update --check --format json > "$temporary/check.json"
+jq '{ok,error_code:.error.code,version:.data.current_version,latest:.data.latest_version,available:.data.update_available,owner:.data.owner}' "$temporary/check.json"
+jq -e --arg version "$expected" '.ok and .data.latest_version == $version and .data.update_available == true' "$temporary/check.json" >/dev/null
 "$cli" update --format json > "$temporary/update.json"
 jq -e '.ok and .data.updated == true and .data.previous_executable.copy_verified == true' "$temporary/update.json" >/dev/null
 previous="$(jq -er '.data.previous_executable.relative_path' "$temporary/update.json")"
