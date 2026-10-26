@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-set -euo pipefail
+set -Eeuo pipefail
+trap 'printf "Native candidate verification failed at line %s\n" "$LINENO" >&2' ERR
 [[ $# == 2 && "$1" == /* && "$2" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]] || {
   echo "usage: $0 /absolute/candidate/obsdog vMAJOR.MINOR.PATCH" >&2
   exit 64
@@ -105,6 +106,61 @@ with (Path(temporary) / 'mcp.stderr').open('w') as stderr:
 PY
 "$cli" trace list --space "$space_id" --format json | \
   jq -e '.ok and (.data.rows | length) == 1' >/dev/null
+# Qualify new structural behavior with the actual platform executable.
+# Historical distributions retain their original native smoke contract.
+IFS=. read -r major minor patch <<< "${version#v}"
+if (( 10#$major > 0 || 10#$minor > 2 || (10#$minor == 2 && 10#$patch >= 32) )); then
+  printf '# Synthetic sections\n\n## First\n\nCometstructuralalpha evidence.\n\n## Second\n\nBeta evidence.\n\n## Third\n\nGamma evidence.\n\n## Fourth\n\nDelta evidence.\n' > "$temporary/sections.md"
+  "$cli" document import --space "$space_id" --file "$temporary/sections.md" \
+    --actor-type agent --actor release-native-smoke --format json > "$temporary/sections-import.json"
+  section_doc="$(jq -er '.data.document.document_id' "$temporary/sections-import.json")"
+  "$cli" document read --space "$space_id" --id "$section_doc" --structure --format json > "$temporary/sections-before.json"
+  section_base="$(jq -er '.data.document.current_revision_id' "$temporary/sections-before.json")"
+  roots="$(jq -er '[.data.blocks[1].block_id,.data.blocks[5].block_id] | join(",")' "$temporary/sections-before.json")"
+  anchor="$(jq -er '.data.blocks[7].block_id' "$temporary/sections-before.json")"
+  "$cli" search --space "$space_id" --query cometstructuralalpha --no-observe --format json > "$temporary/section-search-before.json"
+  if "$cli" block move --space "$space_id" --ids "$roots" --after "$anchor" \
+      --reason 'Synthetic missing-base refusal' --actor-type human --actor native-smoke \
+      --format json > "$temporary/missing-base.json"; then
+    echo 'A human batch accepted an inferred base.' >&2; exit 1
+  fi
+  jq -e '.ok == false' "$temporary/missing-base.json" >/dev/null
+  "$cli" block move --space "$space_id" --ids "$roots" --after "$anchor" \
+    --base-document-revision "$section_base" --reason 'Synthetic disjoint section move' \
+    --actor-type agent --actor release-native-smoke --format json > "$temporary/move.json"
+  jq -e '.ok and .data.care.status == "applied" and (.data.change.moved_block_ids | length) == 4' "$temporary/move.json" >/dev/null
+  "$cli" document read --space "$space_id" --id "$section_doc" --structure --format json > "$temporary/sections-after.json"
+  python3 - "$temporary" <<'PY'
+import json
+from pathlib import Path
+import sys
+root = Path(sys.argv[1])
+before = json.loads((root / 'sections-before.json').read_text())['data']
+after = json.loads((root / 'sections-after.json').read_text())['data']
+blocks = before['blocks']
+assert len(blocks) == len(after['blocks']) == 9
+assert [b['block_id'] for b in after['blocks']] == [blocks[i]['block_id'] for i in (0,3,4,7,8,1,2,5,6)]
+prior = {b['block_id']: b for b in blocks}
+for block in after['blocks']:
+    expected = dict(prior[block['block_id']])
+    expected['ordinal'] = block['ordinal']
+    assert expected == block
+assert before['document']['current_revision_id'] != after['document']['current_revision_id']
+PY
+  "$cli" search --space "$space_id" --query cometstructuralalpha --no-observe --format json > "$temporary/section-search-after.json"
+  for phase in before after; do
+    jq -e '.ok and (.data.hits | length) == 1 and (.data.hits[0].block_id | type) == "string" and (.data.hits[0].block_revision_id | type) == "string"' "$temporary/section-search-$phase.json" >/dev/null
+    jq -S '.data.hits[0] | {block_id,block_revision_id,score}' "$temporary/section-search-$phase.json" > "$temporary/section-hit-$phase.json"
+  done
+  cmp "$temporary/section-hit-before.json" "$temporary/section-hit-after.json"
+  section_head="$(jq -er '.data.document.current_revision_id' "$temporary/sections-after.json")"
+  "$cli" block move --space "$space_id" --ids "$roots" --after "$anchor" \
+    --base-document-revision "$section_head" --reason 'Synthetic no-op' \
+    --actor-type agent --actor release-native-smoke --format json | jq -e '.ok and .data.no_op == true' >/dev/null
+  "$cli" document read --space "$space_id" --id "$section_doc" --format json | \
+    jq -e --arg head "$section_head" '.ok and .data.document.current_revision_id == $head' >/dev/null
+  echo 'Native disjoint subtree batch, explicit base, unchanged identities/search and no-op smoke passed'
+fi
 "$cli" dashboard serve --space "$space_id" --port 0 \
   > "$temporary/viewer.stdout" 2> "$temporary/viewer.stderr" &
 viewer_pid=$!
