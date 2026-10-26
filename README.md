@@ -94,7 +94,8 @@ review and approve this formula only; whole-tap trust is unnecessary.
 
 ### Standalone installer
 
-v0.2.30 improves [cold recovery](releases/v0.2.30.md) for retention-enabled Spaces,
+v0.2.31 adds [atomic authoring commands](releases/v0.2.31.md) and reduces duplicate index checks.
+The [v0.2.30 cold recovery correction](releases/v0.2.30.md) remains included for retention-enabled Spaces,
 including existing built-in labels and original partial history. Current links
 remain usable, original observations keep their identities, and expired full
 bodies are explicitly unavailable.
@@ -104,8 +105,8 @@ Download the installer and checksum manifest from the same immutable release,
 inspect them, then install:
 
 ```sh
-curl -fL --proto '=https' -o obsdog-install.sh https://github.com/obsdoghq/obsdog-releases/releases/download/v0.2.30/install.sh
-curl -fL --proto '=https' -o obsdog-checksums.txt https://github.com/obsdoghq/obsdog-releases/releases/download/v0.2.30/checksums.txt
+curl -fL --proto '=https' -o obsdog-install.sh https://github.com/obsdoghq/obsdog-releases/releases/download/v0.2.31/install.sh
+curl -fL --proto '=https' -o obsdog-checksums.txt https://github.com/obsdoghq/obsdog-releases/releases/download/v0.2.31/checksums.txt
 if command -v sha256sum >/dev/null 2>&1; then
   sha256sum obsdog-install.sh
 else
