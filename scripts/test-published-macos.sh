@@ -23,10 +23,13 @@ fetch_installer() {
 fetch_installer "$expected" "$temporary/current"
 sh "$temporary/current/install.sh" --install-dir "$temporary/fresh"
 [[ "$("$temporary/fresh/obsdog" version)" == "$expected" ]]
-fetch_installer v0.2.30 "$temporary/previous"
+previous_version=v0.2.31
+# Retain the previous published release's own historical verification path.
+[[ "$expected" != v0.2.31 ]] || previous_version=v0.2.30
+fetch_installer "$previous_version" "$temporary/previous"
 sh "$temporary/previous/install.sh" --install-dir "$temporary/retained"
 cli="$temporary/retained/obsdog"
-[[ "$("$cli" version)" == v0.2.30 ]]
+[[ "$("$cli" version)" == "$previous_version" ]]
 printf 'Previous executable version verified.\n'
 "$cli" space default --ensure --format json > "$temporary/space.json"
 printf 'Previous local profile initialized.\n'
@@ -55,4 +58,4 @@ cmp "$temporary/before-content.json" "$temporary/after-content.json"
   jq -e '.ok and (.data.hits | length) == 1' >/dev/null
 "$cli" update --check --format json | jq -e --arg version "$expected" \
   '.ok and .data.current_version == $version and .data.latest_version == $version and .data.update_available == false' >/dev/null
-printf 'Published macOS %s: anonymous default install and v0.2.30 retained-data update passed.\n' "$expected"
+printf 'Published macOS %s: anonymous default install and %s retained-data update passed.\n' "$expected" "$previous_version"

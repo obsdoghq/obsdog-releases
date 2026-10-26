@@ -153,6 +153,12 @@ PY
     jq -S '.data.hits[0] | {block_id,block_revision_id,score}' "$temporary/section-search-$phase.json" > "$temporary/section-hit-$phase.json"
   done
   cmp "$temporary/section-hit-before.json" "$temporary/section-hit-after.json"
+  jq -e --slurpfile before "$temporary/section-search-before.json" '
+    (.data.index_snapshot_id | type) == "string" and
+    (.data.hits[0].chunk_id | type) == "string" and
+    .data.index_snapshot_id != $before[0].data.index_snapshot_id and
+    .data.hits[0].chunk_id != $before[0].data.hits[0].chunk_id
+  ' "$temporary/section-search-after.json" >/dev/null
   section_head="$(jq -er '.data.document.current_revision_id' "$temporary/sections-after.json")"
   "$cli" block move --space "$space_id" --ids "$roots" --after "$anchor" \
     --base-document-revision "$section_head" --reason 'Synthetic no-op' \
