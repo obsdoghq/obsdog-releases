@@ -7,6 +7,9 @@ def run(*args,ok=True):
  p=subprocess.run([str(binary),*args],cwd=out,env=env,capture_output=True,text=True,timeout=45)
  r=dict(args=args,exit=p.returncode,stdout=p.stdout,stderr=p.stderr);records.append(r);(out/'commands.json').write_text(json.dumps(records,indent=2));assert (p.returncode==0)==ok,r
  return json.loads(p.stdout)
+help_result=subprocess.run([str(binary),'block','move','--help'],cwd=out,env=env,capture_output=True,text=True,timeout=10)
+assert help_result.returncode==0 and '--dry-run' in help_result.stdout and 'preserves parent context' in help_result.stdout,help_result
+(out/'block-help.txt').write_text(help_result.stdout)
 chosen=binary
 if os.environ.get('OBSDOG_FEEDBACK16_SEED'):binary=Path(os.environ['OBSDOG_FEEDBACK16_SEED']).resolve()
 space=run('space','default','--ensure','--format','json')['data']['space_id'];binary=chosen
