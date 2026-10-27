@@ -119,6 +119,25 @@ jobs:
           then
             python3 scripts/test-round14-native.py "$GITHUB_WORKSPACE/candidate/obsdog" "$GITHUB_WORKSPACE/prior-schema12/obsdog" "$RUNNER_TEMP"
           fi
+          if python3 - "$RELEASE_VERSION" <<'PYROUND15'
+          import sys
+          sys.exit(tuple(map(int,sys.argv[1].removeprefix('v').split('.'))) < (0,2,35))
+          PYROUND15
+          then
+            mkdir prior-structural
+            curl -fsSL --retry 2 https://github.com/obsdoghq/obsdog-releases/releases/download/v0.2.34/obsdog_v0.2.34_darwin_arm64.tar.gz -o prior-structural/obsdog_v0.2.34_darwin_arm64.tar.gz
+            curl -fsSL --retry 2 https://github.com/obsdoghq/obsdog-releases/releases/download/v0.2.34/checksums.txt -o prior-structural/checksums.txt
+            python3 - <<'PYCHECK15'
+          import hashlib,pathlib
+          p=pathlib.Path('prior-structural/obsdog_v0.2.34_darwin_arm64.tar.gz')
+          expected=[line.split()[0] for line in pathlib.Path('prior-structural/checksums.txt').read_text().splitlines() if line.split()[1].removeprefix('*')==p.name]
+          assert len(expected)==1 and hashlib.sha256(p.read_bytes()).hexdigest()==expected[0]
+          PYCHECK15
+            test "$(tar -tzf prior-structural/obsdog_v0.2.34_darwin_arm64.tar.gz)" = obsdog
+            tar -C prior-structural -xzf prior-structural/obsdog_v0.2.34_darwin_arm64.tar.gz
+            prior-structural/obsdog version --format json | python3 -c 'import json,sys; assert json.load(sys.stdin)["data"]["version"] == "v0.2.34"'
+            python3 scripts/test-round15-native.py "$GITHUB_WORKSPACE/candidate/obsdog" "$GITHUB_WORKSPACE/prior-structural/obsdog" "$RUNNER_TEMP"
+          fi
       - name: Verify anonymous published installation and retained-data update
         if: inputs.published
         env:

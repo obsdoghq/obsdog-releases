@@ -8,7 +8,8 @@ It does **not** contain the proprietary application source code.
 
 [Send feedback](https://github.com/obsdoghq/obsdog-releases/issues/new/choose) ·
 [Feedback privacy guide](FEEDBACK.md) ·
-[AI-client setup](https://github.com/obsdoghq/skills/blob/main/docs/SETUP.md)
+[AI-client setup](https://github.com/obsdoghq/skills/blob/main/docs/SETUP.md) ·
+[Structural Care and recovery](guides/structural-care.md)
 
 Internal implementation is tracked in Project draft tickets, not duplicate Issues
 or TODO checklists. Public issues remain feedback intake. Follow the feedback
