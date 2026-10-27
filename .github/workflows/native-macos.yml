@@ -112,6 +112,13 @@ jobs:
             tar -C prior-schema12 -xzf prior-schema12/obsdog_v0.2.32_darwin_arm64.tar.gz
             bash scripts/test-sharing-transition-native.sh "$GITHUB_WORKSPACE/prior-schema12/obsdog" "$GITHUB_WORKSPACE/candidate/obsdog" "$GITHUB_WORKSPACE/candidate/obsdog-share-migrate" "$RELEASE_VERSION" "$RUNNER_TEMP"
           fi
+          if python3 - "$RELEASE_VERSION" <<'PYROUND14'
+          import sys
+          sys.exit(tuple(map(int,sys.argv[1].removeprefix('v').split('.'))) < (0,2,34))
+          PYROUND14
+          then
+            python3 scripts/test-round14-native.py "$GITHUB_WORKSPACE/candidate/obsdog" "$GITHUB_WORKSPACE/prior-schema12/obsdog" "$RUNNER_TEMP"
+          fi
       - name: Verify anonymous published installation and retained-data update
         if: inputs.published
         env:
