@@ -67,9 +67,12 @@ The read-only **Verify published Linux installation** workflow runs on a
 GitHub-hosted Linux runner after publication. It downloads the exact public
 installer and checksum manifest without authentication, verifies a fresh
 install in a temporary profile, and checks local knowledge and the public
-updater. It neither builds nor publishes binaries. Run it with the current
-stable release version; a first Linux install is not a historical macOS
-retained-data upgrade test.
+updater. A separate temporary profile verifies an update from the specified
+previous stable release, unchanged document/block identities and recorded events,
+and the exact retained original executable. It neither builds nor publishes
+binaries. Run it with the current and previous stable release versions. The macOS
+workflow also verifies a retained-data update from the preceding stable patch;
+pass an explicit earlier version when checking a historical upgrade path.
 
 Local Personal use and stdio MCP need no account or GUI. Cloud login/sync uses
 an unlocked Linux Secret Service keyring over D-Bus by default. v0.2.21 adds an

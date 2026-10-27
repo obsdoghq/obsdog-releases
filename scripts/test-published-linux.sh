@@ -41,4 +41,7 @@ cli="$destination/obsdog"
 "$cli" trace list --format json | jq -e '.ok == true and (.data.rows | length) == 0 and .data.has_more == false' >/dev/null
 "$cli" update --check --format json | jq -e --arg expected "$expected" \
   '.ok == true and .data.latest_version == $expected and .data.current_version == $expected and .data.owner == "standalone" and .data.update_available == false' >/dev/null
+if [[ -n "${2:-}" ]]; then
+  bash "$root/scripts/test-published-update.sh" "$expected" "$2"
+fi
 printf 'Published Linux %s: anonymous default install, local-only knowledge, unobserved probe and updater passed.\n' "$expected"
