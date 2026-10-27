@@ -9,7 +9,9 @@ import sys
 import tempfile
 import time
 
+assert len(sys.argv) in (4, 5), "usage: candidate prior-v34 output-root [seed-v32]"
 BIN, OLD = (Path(value).resolve() for value in sys.argv[1:3])
+SEED = Path(sys.argv[4]).resolve() if len(sys.argv) == 5 else OLD
 OUT = Path(tempfile.mkdtemp(prefix="native-structure-", dir=sys.argv[3]))
 ENV = dict(os.environ, OBSDOG_HOME=str(OUT / "profile"), OBSDOG_NO_UPDATE_NOTIFIER="1")
 RECORDS = []
@@ -67,9 +69,16 @@ def structure(document, action, *extra):
     return result
 
 
-# Actual prior writer prepares this same schema13 profile before new adoption.
-SPACE = run("space", "default", "--ensure", "--format", "json", binary=OLD)["space_id"]
+# The actual v34 writer remains admitted on either existing schema12 or13
+# before structural adoption. The optional v32 seed creates schema12 explicitly.
+assert run("version", "--format", "json", binary=OLD)["version"] == "v0.2.34"
+seed_version = run("version", "--format", "json", binary=SEED)["version"]
+assert seed_version == ("v0.2.32" if SEED != OLD else "v0.2.34")
+SPACE = run("space", "default", "--ensure", "--format", "json", binary=SEED)["space_id"]
 DB = Path(ENV["OBSDOG_HOME"]) / "spaces" / SPACE / "obsdog.db"
+with sqlite3.connect(f"file:{DB}?mode=ro", uri=True) as connection:
+    baseline_schema = connection.execute("SELECT max(version) FROM schema_migrations").fetchone()[0]
+assert baseline_schema == (12 if SEED != OLD else 13)
 document = imported("opening", "Opening paragraph.\n\nFirst fact.\n\nSecond fact.\n\n## Existing\n\nNested fact.\n", OLD)
 DOC = document["document"]["document_id"]
 observed = run("search", "--query", "Opening", "--actor-type", "agent", "--actor", "mcp-agent", "--format", "json")
@@ -192,7 +201,10 @@ assert read(DOC)["markdown"] == state["markdown"]
 receipt = run("care", "runs", "--space", SPACE, "--run", heading["run_id"], "--format", "json")
 assert receipt["action"] == "insert-heading"
 old_refusal()
-(OUT / "accepted.json").write_text(json.dumps(dict(checks=["read_only_cli_under_writer", "real_stdio_mcp_under_writer",
+with sqlite3.connect(f"file:{DB}?mode=ro", uri=True) as connection:
+    assert connection.execute("SELECT max(version) FROM schema_migrations").fetchone()[0] == baseline_schema
+(OUT / "accepted.json").write_text(json.dumps(dict(baseline_schema=baseline_schema, seed_version=seed_version,
+    prior_writer="v0.2.34", checks=["read_only_cli_under_writer", "real_stdio_mcp_under_writer",
     "rollback_only_readiness", "honest_unobserved_fallback", "leading_h1", "midsection_h2", "subtree_retirement",
     "other_parent_move", "noncontiguous_cross_document_lineage", "original_intent_replay",
     "actual_prior_writer_refusal", "backup_restore_preserves_floor"]), indent=2))

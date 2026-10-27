@@ -1,6 +1,6 @@
 # Restructure an explanation with exact history
 
-CLI v0.2.35+ adds explicit structural Care. Check installed `care structure
+CLI v0.2.35+ adds explicit structural Care. Existing schema12 libraries remain supported without automatic transition; fresh libraries use13. Check installed `care structure
 --help` and `doctor` capabilities first. Local-only Spaces need no account. A
 connected Space needs authenticated `document_structural_v1` preparation and
 compatible active consumers. Update each long-running MCP/viewer separately.

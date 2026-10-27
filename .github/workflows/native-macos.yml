@@ -137,6 +137,7 @@ jobs:
             tar -C prior-structural -xzf prior-structural/obsdog_v0.2.34_darwin_arm64.tar.gz
             prior-structural/obsdog version --format json | python3 -c 'import json,sys; assert json.load(sys.stdin)["data"]["version"] == "v0.2.34"'
             python3 scripts/test-round15-native.py "$GITHUB_WORKSPACE/candidate/obsdog" "$GITHUB_WORKSPACE/prior-structural/obsdog" "$RUNNER_TEMP"
+            python3 scripts/test-round15-native.py "$GITHUB_WORKSPACE/candidate/obsdog" "$GITHUB_WORKSPACE/prior-structural/obsdog" "$RUNNER_TEMP" "$GITHUB_WORKSPACE/prior-schema12/obsdog"
           fi
       - name: Verify anonymous published installation and retained-data update
         if: inputs.published
