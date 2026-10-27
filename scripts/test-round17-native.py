@@ -38,9 +38,11 @@ try:
  upd=run(*update,'--dry-run');assert upd['data']['status']=='deferred' and facts()==before,upd
 finally:lock.rollback();lock.close()
 applied=run(*repair)['data'];assert applied['status']=='applied',applied
-after=read(doc);fields=('block_id','current_revision_id','content','ordinal','block_type','depth')
+after=read(doc);fields=('block_id','current_revision_id','content','ordinal','type','depth')
 for x,y in zip(blocks,after['blocks']):
- for k in fields:assert x.get(k)==y.get(k),(k,x,y)
+  for k in fields:
+   assert k in x and k in y,(k,x,y)
+   assert x[k]==y[k],(k,x,y)
 assert len(after['blocks'])==len(blocks)
 replay=run(*repair)['data'];assert replay['replayed'] and replay['run_id']==applied['run_id']
 stale=list(repair);stale[stale.index('--reason')+1]='different intent';assert 'revision conflict' in run(*stale,ok=False)['error']
