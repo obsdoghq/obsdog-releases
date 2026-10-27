@@ -95,6 +95,12 @@ review and approve this formula only; whole-tap trust is unnecessary.
 
 ### Standalone installer
 
+v0.2.35 [adds explicit structural Care and contention diagnostics](releases/v0.2.35.md).
+Retire sections, insert headings, reparent subtrees and transfer disjoint roots
+with exact history. Use read-only checks, separate writer readiness and current
+capabilities; [the guide](guides/structural-care.md) covers both existing schema12
+and fresh schema13 without automatic migration.
+
 v0.2.34 [adds import recovery drafts, split previews and explicit title headings](releases/v0.2.34.md).
 It also rejects misplaced search flags and reports writer admission failures and
 separate runtime capabilities. Existing sessions need a reconnect to load updated
@@ -117,8 +123,8 @@ Download the installer and checksum manifest from the same immutable release,
 inspect them, then install:
 
 ```sh
-curl -fL --proto '=https' -o obsdog-install.sh https://github.com/obsdoghq/obsdog-releases/releases/download/v0.2.34/install.sh
-curl -fL --proto '=https' -o obsdog-checksums.txt https://github.com/obsdoghq/obsdog-releases/releases/download/v0.2.34/checksums.txt
+curl -fL --proto '=https' -o obsdog-install.sh https://github.com/obsdoghq/obsdog-releases/releases/download/v0.2.35/install.sh
+curl -fL --proto '=https' -o obsdog-checksums.txt https://github.com/obsdoghq/obsdog-releases/releases/download/v0.2.35/checksums.txt
 if command -v sha256sum >/dev/null 2>&1; then
   sha256sum obsdog-install.sh
 else
