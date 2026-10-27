@@ -91,6 +91,27 @@ jobs:
           unset GH_TOKEN GITHUB_TOKEN OBSDOG_GITHUB_TOKEN
           candidate/obsdog-migrate --version | grep -F "obsdog-migrate $RELEASE_VERSION"
           bash scripts/test-native-candidate.sh "$GITHUB_WORKSPACE/candidate/obsdog" "$RELEASE_VERSION"
+          if python3 - "$RELEASE_VERSION" <<'PYVERSION'
+          import sys
+          sys.exit(tuple(map(int,sys.argv[1].removeprefix('v').split('.'))) < (0,2,33))
+          PYVERSION
+          then
+            shared="obsdog-share-migrate_schema12_to13_${RELEASE_VERSION}_darwin_arm64.tar.gz"
+            test "$(tar -tzf "candidate/$shared")" = obsdog-share-migrate
+            tar -C candidate -xzf "candidate/$shared"
+            mkdir prior-schema12
+            curl -fsSL --retry 2 https://github.com/obsdoghq/obsdog-releases/releases/download/v0.2.32/obsdog_v0.2.32_darwin_arm64.tar.gz -o prior-schema12/obsdog_v0.2.32_darwin_arm64.tar.gz
+            curl -fsSL --retry 2 https://github.com/obsdoghq/obsdog-releases/releases/download/v0.2.32/checksums.txt -o prior-schema12/checksums.txt
+            python3 - <<'PYCHECK'
+          import hashlib,pathlib
+          p=pathlib.Path('prior-schema12/obsdog_v0.2.32_darwin_arm64.tar.gz')
+          expected=[line.split()[0] for line in pathlib.Path('prior-schema12/checksums.txt').read_text().splitlines() if line.split()[1].removeprefix('*')==p.name]
+          assert len(expected)==1 and hashlib.sha256(p.read_bytes()).hexdigest()==expected[0]
+          PYCHECK
+            test "$(tar -tzf prior-schema12/obsdog_v0.2.32_darwin_arm64.tar.gz)" = obsdog
+            tar -C prior-schema12 -xzf prior-schema12/obsdog_v0.2.32_darwin_arm64.tar.gz
+            bash scripts/test-sharing-transition-native.sh "$GITHUB_WORKSPACE/prior-schema12/obsdog" "$GITHUB_WORKSPACE/candidate/obsdog" "$GITHUB_WORKSPACE/candidate/obsdog-share-migrate" "$RELEASE_VERSION" "$RUNNER_TEMP"
+          fi
       - name: Verify anonymous published installation and retained-data update
         if: inputs.published
         env:
