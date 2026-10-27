@@ -1,6 +1,96 @@
 # Local schema migration
 
-## Published path: exact stable 11 → 12
+## Optional stable 12 → 13 with v0.2.33
+
+CLI v0.2.33 creates new libraries at schema13. Existing schema12 libraries stay
+at12 and remain readable and writable. Installing or updating the executable
+does not migrate a library, upload knowledge or change another device's database.
+The separately packaged `obsdog-share-migrate` performs only exact12→13;
+`obsdog-migrate` below still performs only11→12. For11, complete the older
+transition first and verify it before considering13. Fenced historical recovery
+sources must remain unchanged.
+
+Schema13 shares unchanged immutable membership pages, block state and copied
+labels across new snapshots, including run-pinned snapshots. It retains existing
+chunk IDs, historical title/content/order/labels, frozen pages, observations and
+pending operations. Learned sample templates are replaceable local caches;
+current eligibility, as-of filtering, decay and ranking policy are unchanged.
+Existing dense history is preserved rather than rewritten. Full source validation
+still scales with library size. This is not a promise of faster commands, smaller
+existing files or constant-time writes. No automatic VACUUM runs.
+
+### Prepare the exact library
+
+1. Install the verified v0.2.33 CLI. Update all processes that will open this same
+   library. Keep the previous executable outside PATH for isolated recovery;
+   older writers refuse schema13. A separate device can retain its own12 library
+   and exchange the supported logical sync format, subject to that Space's
+   existing consumer floors.
+2. Before a connected Space uses schema13 history adoption, confirm its receiving
+   server advertises `personal_history_schema13_v1`. Unsupported readers must
+   refuse before import; installation alone does not enable a remote capability.
+3. Download `checksums.txt` and your platform's same-release helper archive:
+   `obsdog-share-migrate_schema12_to13_v0.2.33_darwin_arm64.tar.gz` for Apple
+   silicon macOS or `obsdog-share-migrate_schema12_to13_v0.2.33_linux_amd64.tar.gz`
+   for Linux x86_64. Verify its SHA-256 before extracting its one
+   `obsdog-share-migrate` executable. Its packaged-binary SPDX SBOM is also in
+   the manifest. Run `./obsdog-share-migrate --version`; do not put the helper
+   permanently in PATH.
+4. Read `obsdog space list --format json` for the exact local ID. Use its
+   canonical directory, normally `~/.obsdog/spaces/<exact-space-id>`, not a
+   project folder. Allow space for the live DB, temporary WAL and two consistent
+   backup snapshots. Preserve live WAL/SHM files.
+
+Read-only preview creates no backup or network request:
+
+```sh
+./obsdog-share-migrate \
+  --space-directory /absolute/path/to/.obsdog/spaces/spc_EXACT_ID
+```
+
+It checks exact supported shape, identity, integrity and foreign keys. It does
+not establish that writers are paused, or guarantee apply will pass its later
+exclusive recheck.
+
+### Apply, read back and recover
+
+Pause agents and automation using this exact library, let outstanding work
+finish, stop its owned foreground viewer, and disconnect its host-owned MCPs.
+`--writers-paused` acknowledges this work; the helper does not kill processes.
+Another device's separate database does not need a filesystem-wide shutdown.
+
+Choose a **new private backup directory outside the entire source profile**,
+with an existing parent. Existing output is refused, including on a retry:
+
+```sh
+./obsdog-share-migrate \
+  --space-directory /absolute/path/to/.obsdog/spaces/spc_EXACT_ID \
+  --backup-dir /absolute/path/outside-the-profile/schema13-backup \
+  --apply --writers-paused
+```
+
+The helper takes consistent `before.db` and `after.db` backups, checks original
+logical-row fingerprints, and applies one transaction after an exclusive source
+recheck. Its receipt reports schema12→13 and original-row preservation. Unknown
+source extensions, unsupported consumers, inconsistent source or failed checks
+refuse the transition. A failed transaction does not publish a partial13 format;
+preserve its diagnostics and private output when investigating.
+
+Read an existing document and retained search page with v0.2.33 after success.
+Verify the expected revision and Markdown before resuming supported writers and
+owned MCP/viewer processes. New writes create shared membership while old dense
+identities remain intact. The normal CLI continues to support12 without this
+optional transition.
+
+There is no in-place13→12 downgrade. Never overwrite the live database with
+`before.db`, remove schema rows or erase WAL/SHM to force an old executable open.
+Use the latest compatible CLI for continued work. If pre-transition recovery is
+needed, preserve the current library and inspect a separate private copy of the
+complete backup bundle with the matching older tool. That copy omits subsequent
+writes; do not upload it over newer remote state. Keep backups, fingerprints and
+receipts private because they contain knowledge and identifiers.
+
+## Historical published path: exact stable 11 → 12
 
 Use CLI v0.2.28 and the separately verified transition assets from its same
 immutable release. Do not migrate a library with a candidate or mismatched tool.

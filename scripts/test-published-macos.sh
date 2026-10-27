@@ -24,6 +24,7 @@ fetch_installer "$expected" "$temporary/current"
 sh "$temporary/current/install.sh" --install-dir "$temporary/fresh"
 [[ "$("$temporary/fresh/obsdog" version)" == "$expected" ]]
 previous_version=v0.2.31
+[[ "$expected" != v0.2.33 ]] || previous_version=v0.2.32
 # Retain the previous published release's own historical verification path.
 [[ "$expected" != v0.2.31 ]] || previous_version=v0.2.30
 fetch_installer "$previous_version" "$temporary/previous"
