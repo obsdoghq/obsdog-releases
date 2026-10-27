@@ -105,3 +105,11 @@ already included in total elapsed. Phases can overlap and should not be summed.
 An allowance is not an ETA. Each long-lived MCP request gets a fresh allowance.
 Owner sampling reports an actual observed OS holder or an explicit unknown
 reason; sample span is not proof of continuous transaction age.
+
+
+`care_diagnostics.complete` describes attribution of the **reported condition**
+to named blocks in the receipt's exact before frames. Read total, returned and
+remaining together for the bounded list; this does not assert that later
+mechanical checks are ready. Doctor's scan_complete describes its document scan
+window. Use status, reason_class and mechanical_checks to assess the proposed
+operation; a complete attribution is not an authorization to alter the selection.
