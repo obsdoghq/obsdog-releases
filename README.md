@@ -9,7 +9,8 @@ It does **not** contain the proprietary application source code.
 [Send feedback](https://github.com/obsdoghq/obsdog-releases/issues/new/choose) ·
 [Feedback privacy guide](FEEDBACK.md) ·
 [AI-client setup](https://github.com/obsdoghq/skills/blob/main/docs/SETUP.md) ·
-[Structural Care and recovery](guides/structural-care.md)
+[Structural Care and recovery](guides/structural-care.md) ·
+[Local availability and maintenance](guides/local-maintenance.md)
 
 Internal implementation is tracked in Project draft tickets, not duplicate Issues
 or TODO checklists. Public issues remain feedback intake. Follow the feedback
@@ -94,6 +95,15 @@ installation or upgrade. If Homebrew requests trust,
 review and approve this formula only; whole-tap trust is unnecessary.
 
 ### Standalone installer
+
+v0.2.36 [separates knowledge access from observation persistence](releases/v0.2.36.md).
+Ordinary access no longer runs snapshot cleanup. Inspect exact next-read targets,
+writer phase/owner diagnostics and draft metadata, retire temporary documents
+without a sink, and preview/apply explicit compaction. Complete bounded structural
+diagnostics connect IDs, ordinals and previews; exact-head parent repair preserves
+content and order. Move/update have read-only previews. Local MCP failures carry
+structured errors without a default normal result. Read the
+[availability and maintenance guide](guides/local-maintenance.md).
 
 v0.2.35 [adds explicit structural Care and contention diagnostics](releases/v0.2.35.md).
 Retire sections, insert headings, reparent subtrees and transfer disjoint roots
