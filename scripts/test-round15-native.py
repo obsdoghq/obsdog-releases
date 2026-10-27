@@ -72,6 +72,7 @@ def structure(document, action, *extra):
 # The actual v34 writer remains admitted on either existing schema12 or13
 # before structural adoption. The optional v32 seed creates schema12 explicitly.
 assert run("version", "--format", "json", binary=OLD)["version"] == "v0.2.34"
+candidate_version=tuple(map(int,run("version","--format","json")["version"].removeprefix("v").split(".")))
 seed_version = run("version", "--format", "json", binary=SEED)["version"]
 assert seed_version == ("v0.2.32" if SEED != OLD else "v0.2.34")
 SPACE = run("space", "default", "--ensure", "--format", "json", binary=SEED)["space_id"]
@@ -97,7 +98,11 @@ try:
     read(DOC)
     readiness = run("space", "write-readiness", "--format", "json")
     assert readiness["status"] == "busy" and not readiness["ready"]
-    assert readiness["writer"] == "unknown" and readiness["transaction_age_ms"] is None
+    assert readiness["transaction_age_ms"] is None
+    if candidate_version >= (0,2,36):
+        assert readiness["writer_owner"]["pid"] == os.getpid()
+    else:
+        assert readiness["writer"] == "unknown"
     process = subprocess.Popen([str(BIN), "mcp", "--space", SPACE], cwd=OUT, env=ENV,
                                stdin=subprocess.PIPE, stdout=subprocess.PIPE,
                                stderr=subprocess.PIPE, text=True, bufsize=1)
@@ -133,9 +138,16 @@ try:
             assert not result.get("isError"), result
         opened = rpc("tools/call", dict(name="obsdog_search_open", arguments={"retrieval_run_id": observed["retrieval_run_id"], "rank": 1}))
         (OUT / "mcp-open.json").write_text(json.dumps(opened, indent=2))
-        assert opened["isError"], opened
-        admission = opened["_meta"]["obsdog.ai/diagnostics"]
-        assert admission["attempts"] and admission["writer"] == "unknown"
+        if candidate_version >= (0,2,36):
+            assert not opened.get("isError"),opened
+            content=opened["structuredContent"]["result"]
+            assert content["observation"]["persistence"]=="not_recorded" and not content["event_ids"]
+            admission=content["writer_reservation"]
+            assert admission["attempts"] and admission["writer_owner"]["pid"]==os.getpid()
+        else:
+            assert opened["isError"],opened
+            admission=opened["_meta"]["obsdog.ai/diagnostics"]
+            assert admission["attempts"] and admission["writer"]=="unknown"
         assert opened["_meta"]["obsdog.ai/operation"] == "obsdog_search_open"
         result = rpc("tools/call", dict(name="obsdog_search", arguments={"query": "Opening", "limit": 3}))
         assert not result.get("isError"), result
