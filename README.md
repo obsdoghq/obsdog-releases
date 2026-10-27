@@ -94,6 +94,11 @@ review and approve this formula only; whole-tap trust is unnecessary.
 
 ### Standalone installer
 
+v0.2.34 [adds import recovery drafts, split previews and explicit title headings](releases/v0.2.34.md).
+It also rejects misplaced search flags and reports writer admission failures and
+separate runtime capabilities. Existing sessions need a reconnect to load updated
+guidance; a plugin update does not install the CLI or replace a running server.
+
 v0.2.33 [shares snapshot membership and reuses learned sample derivation](releases/v0.2.33.md).
 Existing schema12 libraries stay supported without migration; fresh libraries
 use13. Read the [optional backup-first transition](guides/local-schema-migration.md)
@@ -111,8 +116,8 @@ Download the installer and checksum manifest from the same immutable release,
 inspect them, then install:
 
 ```sh
-curl -fL --proto '=https' -o obsdog-install.sh https://github.com/obsdoghq/obsdog-releases/releases/download/v0.2.33/install.sh
-curl -fL --proto '=https' -o obsdog-checksums.txt https://github.com/obsdoghq/obsdog-releases/releases/download/v0.2.33/checksums.txt
+curl -fL --proto '=https' -o obsdog-install.sh https://github.com/obsdoghq/obsdog-releases/releases/download/v0.2.34/install.sh
+curl -fL --proto '=https' -o obsdog-checksums.txt https://github.com/obsdoghq/obsdog-releases/releases/download/v0.2.34/checksums.txt
 if command -v sha256sum >/dev/null 2>&1; then
   sha256sum obsdog-install.sh
 else
