@@ -152,6 +152,8 @@ jobs:
           then
             python3 scripts/test-round16-native.py "$GITHUB_WORKSPACE/candidate/obsdog" "$RUNNER_TEMP" candidate13
             OBSDOG_FEEDBACK16_SEED="$GITHUB_WORKSPACE/prior-schema12/obsdog" python3 scripts/test-round16-native.py "$GITHUB_WORKSPACE/candidate/obsdog" "$RUNNER_TEMP" candidate12
+            python3 scripts/test-round17-native.py "$GITHUB_WORKSPACE/candidate/obsdog" "$RUNNER_TEMP"
+            OBSDOG_FEEDBACK16_SEED="$GITHUB_WORKSPACE/prior-schema12/obsdog" python3 scripts/test-round17-native.py "$GITHUB_WORKSPACE/candidate/obsdog" "$RUNNER_TEMP"
           fi
 
       - name: Verify anonymous published installation and retained-data update
