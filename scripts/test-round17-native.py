@@ -22,6 +22,7 @@ def facts():
 a=imp('drift','# Root\n\n## Later\n\nFirst paragraph.\n\nSecond paragraph.\n\nThird paragraph.\n\n## Clean\n\nClean body.\n');doc=a['document']['document_id'];base=a['document']['current_revision_id'];blocks=a['blocks']
 with sqlite3.connect(db) as c:
  c.create_function("obsdog_shared_membership",0,lambda:13,deterministic=True)
+ c.create_function("obsdog_stable_baseline",0,lambda:12,deterministic=True)
  for b in blocks[2:5]:c.execute('UPDATE blocks SET parent_id=? WHERE block_id=?',(blocks[0]['block_id'],b['block_id']))
 # Fixture corruption simulates a legal earlier-heading stale parent, not a product repair.
 d=run('doctor','--space',space,'--format','json')['data'];summary=d['markdown_layout_summary'];assert summary['structural_blocks']==3 and summary['affected_documents']==1 and summary['remaining_within_scanned_documents']==0,d
