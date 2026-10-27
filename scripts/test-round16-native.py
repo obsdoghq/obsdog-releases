@@ -65,6 +65,12 @@ try:
     assert exact['structuredContent']['block']['content']==mo['markdown']
     ms=rpc('tools/call',dict(name='obsdog_search',arguments=dict(query='quartzneedle',limit=3)))['structuredContent']['result']
     assert ms['observation']['persistence']=='not_recorded' and not ms['retrieval_run_id']
+    # A long-lived stdio process must not spend one shared15s allowance across
+    # independent requests. Every request gets fresh bounded observation admission.
+    for _ in range(22):
+     repeated=rpc('tools/call',dict(name='obsdog_search',arguments=dict(query='quartzneedle',limit=3)))
+     timings=repeated['_meta']['obsdog.ai/timings']['writer_admissions']
+     assert timings and timings[-1]['budget_ms']>0,repeated
     (out/'mcp-accepted.json').write_text(json.dumps(dict(open=mo,search=ms),indent=2))
     mcp.stdin.close();assert mcp.wait(timeout=8)==0
    finally:
