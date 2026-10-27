@@ -139,6 +139,21 @@ jobs:
             python3 scripts/test-round15-native.py "$GITHUB_WORKSPACE/candidate/obsdog" "$GITHUB_WORKSPACE/prior-structural/obsdog" "$RUNNER_TEMP"
             python3 scripts/test-round15-native.py "$GITHUB_WORKSPACE/candidate/obsdog" "$GITHUB_WORKSPACE/prior-structural/obsdog" "$RUNNER_TEMP" "$GITHUB_WORKSPACE/prior-schema12/obsdog"
           fi
+      - name: Verify read availability and maintenance on both supported baselines
+        env:
+          RELEASE_VERSION: ${{ inputs.version }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if python3 - "$RELEASE_VERSION" <<'PYROUND16'
+          import sys
+          sys.exit(tuple(map(int,sys.argv[1].removeprefix('v').split('.'))) < (0,2,36))
+          PYROUND16
+          then
+            python3 scripts/test-round16-native.py "$GITHUB_WORKSPACE/candidate/obsdog" "$RUNNER_TEMP" candidate13
+            OBSDOG_FEEDBACK16_SEED="$GITHUB_WORKSPACE/prior-schema12/obsdog" python3 scripts/test-round16-native.py "$GITHUB_WORKSPACE/candidate/obsdog" "$RUNNER_TEMP" candidate12
+          fi
+
       - name: Verify anonymous published installation and retained-data update
         if: inputs.published
         env:
