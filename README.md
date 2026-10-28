@@ -98,6 +98,14 @@ review and approve this formula only; whole-tap trust is unnecessary.
 
 ### Standalone installer
 
+v0.2.38 [makes accepted work and correction recovery explicit](releases/v0.2.38.md).
+Read, mutation, search observation and Care receipt outcomes are independent.
+A failed correction retains private local intent and reports target-only retry
+instructions. Commands share a default 60s cancellation deadline; current
+inventory excludes settled redirects. Doctor identifies stale release caches,
+and owned dashboards support authenticated restart. See the
+[acceptance and recovery guide](guides/accepted-work.md).
+
 v0.2.37 [supports bounded activity retention and complete recovery](releases/v0.2.37.md).
 A Space explicitly enabled for the new policy keeps current knowledge, retains
 older versions only within seven days and the latest ten including current,
@@ -143,8 +151,8 @@ Download the installer and checksum manifest from the same immutable release,
 inspect them, then install:
 
 ```sh
-curl -fL --proto '=https' -o obsdog-install.sh https://github.com/obsdoghq/obsdog-releases/releases/download/v0.2.37/install.sh
-curl -fL --proto '=https' -o obsdog-checksums.txt https://github.com/obsdoghq/obsdog-releases/releases/download/v0.2.37/checksums.txt
+curl -fL --proto '=https' -o obsdog-install.sh https://github.com/obsdoghq/obsdog-releases/releases/download/v0.2.38/install.sh
+curl -fL --proto '=https' -o obsdog-checksums.txt https://github.com/obsdoghq/obsdog-releases/releases/download/v0.2.38/checksums.txt
 if command -v sha256sum >/dev/null 2>&1; then
   sha256sum obsdog-install.sh
 else
