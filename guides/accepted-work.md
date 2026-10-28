@@ -91,6 +91,67 @@ remove WAL files or force an unlock. Healthy idle samples do not qualify busy
 owner attribution. Linux synthetic acceptance uses this held/released scenario;
 this release does not claim native macOS execution qualification.
 
+## Reproduce a busy sample in a disposable profile
+
+This example requires CLI38 and an already installed Python3. Use two fresh
+terminal tabs and close those tabs afterward. It creates only synthetic knowledge
+under a new temporary profile; it never opens your normal library. In terminal A:
+
+```sh
+repro_root="$(mktemp -d)"
+export OBSDOG_HOME="$repro_root/profile" OBSDOG_NO_UPDATE_NOTIFIER=1
+printf '# Synthetic test\n\nquartzneedle original answer.\n' > "$repro_root/note.md"
+obsdog document import --file "$repro_root/note.md" --actor-type agent \
+  --actor contention-fixture --format json > "$repro_root/import.json"
+obsdog search --query quartzneedle --actor-type agent --actor contention-fixture \
+  --format json > "$repro_root/search.json"
+obsdog space status --format json > "$repro_root/status.json"
+cat > "$repro_root/hold.py" <<'PYTHON'
+import json, os, shlex, sqlite3, sys
+from pathlib import Path
+root = Path(sys.argv[1]).resolve()
+profile = Path(os.environ["OBSDOG_HOME"]).resolve()
+assert profile == root / "profile"
+status = json.loads((root / "status.json").read_text())["data"]
+assert status["local_only"]
+db = (Path(status["path"]) / "obsdog.db").resolve()
+assert db.is_relative_to(profile) and db.is_file()
+created = json.loads((root / "import.json").read_text())["data"]
+run = json.loads((root / "search.json").read_text())["data"]["retrieval_run_id"]
+block = created["blocks"][1]
+connection = sqlite3.connect(f"file:{db}?mode=rw", uri=True)
+try:
+    connection.execute("BEGIN IMMEDIATE")
+    print("Synthetic writer PID:", os.getpid(), flush=True)
+    print("In terminal B, run these printed commands:", flush=True)
+    print("export OBSDOG_HOME=" + shlex.quote(str(profile)) +
+          " OBSDOG_NO_UPDATE_NOTIFIER=1", flush=True)
+    print("obsdog space write-readiness --format json", flush=True)
+    print(shlex.join(["obsdog", "search", "open", "--run", run, "--rank", "1",
+          "--actor-type", "agent", "--actor", "contention-fixture",
+          "--format", "json"]), flush=True)
+    print(shlex.join(["obsdog", "--timeout", "2s", "block", "update", "--id",
+          block["block_id"], "--base-revision", block["current_revision_id"],
+          "--content", "quartzneedle corrected answer.", "--reason", "Synthetic test",
+          "--actor-type", "agent", "--actor", "contention-fixture",
+          "--format", "json"]), flush=True)
+    input("Press Enter here to release only this synthetic writer: ")
+finally:
+    connection.rollback()
+    connection.close()
+PYTHON
+python3 "$repro_root/hold.py" "$repro_root"
+```
+
+While A holds the transaction, B should observe busy admission and the sampled
+writer PID when the OS exposes it. Open can return the original content with
+observation not_recorded/use_available=false. The bounded edit can be refused;
+inspect its actual mutation/draft state, including a preparation timeout. Age
+can remain null. Press Enter in A, then retry only the original failed open or
+recover only the reported correction draft with its original actor. Do not rerun
+accepted siblings or use a new fork. Compare fresh exact content and revisions.
+No production process is stopped, no forced unlock occurs and no cloud mode changes.
+
 ## Inventory and running dashboard
 
 Every document list row states `lifecycle_state`. The default excludes settled
