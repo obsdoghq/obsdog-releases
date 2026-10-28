@@ -99,6 +99,14 @@ review and approve this formula only; whole-tap trust is unnecessary.
 
 ### Standalone installer
 
+v0.2.37 [supports bounded activity retention and complete recovery](releases/v0.2.37.md).
+A Space explicitly enabled for the new policy keeps current knowledge, retains
+older versions only within seven days and the latest ten including current,
+and preserves small daily aggregates after raw activity details expire.
+Verified recovery checkpoints and subsequent updates preserve original identities
+and unresolved local work. Installing this version does not activate a policy.
+See [history retention and recovery](guides/history-retention.md).
+
 v0.2.36 [separates knowledge access from observation persistence](releases/v0.2.36.md).
 Ordinary access no longer runs snapshot cleanup. Inspect exact next-read targets,
 writer phase/owner diagnostics and draft metadata, retire temporary documents
@@ -136,8 +144,8 @@ Download the installer and checksum manifest from the same immutable release,
 inspect them, then install:
 
 ```sh
-curl -fL --proto '=https' -o obsdog-install.sh https://github.com/obsdoghq/obsdog-releases/releases/download/v0.2.35/install.sh
-curl -fL --proto '=https' -o obsdog-checksums.txt https://github.com/obsdoghq/obsdog-releases/releases/download/v0.2.35/checksums.txt
+curl -fL --proto '=https' -o obsdog-install.sh https://github.com/obsdoghq/obsdog-releases/releases/download/v0.2.37/install.sh
+curl -fL --proto '=https' -o obsdog-checksums.txt https://github.com/obsdoghq/obsdog-releases/releases/download/v0.2.37/checksums.txt
 if command -v sha256sum >/dev/null 2>&1; then
   sha256sum obsdog-install.sh
 else
