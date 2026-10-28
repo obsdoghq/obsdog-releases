@@ -7,12 +7,12 @@ on:
         description: Current published stable release
         required: true
         type: string
-        default: v0.2.36
+        default: v0.2.37
       previous_version:
         description: Previous published stable release for retained-data update
         required: true
         type: string
-        default: v0.2.35
+        default: v0.2.36
   pull_request:
     paths:
       - .github/workflows/published-install.yml
@@ -34,5 +34,5 @@ jobs:
       - name: Verify anonymous installer, local knowledge and updater
         run: bash scripts/test-published-linux.sh "$RELEASE_VERSION" "$PREVIOUS_VERSION"
         env:
-          RELEASE_VERSION: ${{ inputs.version || 'v0.2.36' }}
-          PREVIOUS_VERSION: ${{ inputs.previous_version || 'v0.2.35' }}
+          RELEASE_VERSION: ${{ inputs.version || 'v0.2.37' }}
+          PREVIOUS_VERSION: ${{ inputs.previous_version || 'v0.2.36' }}
