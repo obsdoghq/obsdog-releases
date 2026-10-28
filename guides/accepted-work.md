@@ -93,7 +93,7 @@ this release does not claim native macOS execution qualification.
 
 ## Reproduce a busy sample in a disposable profile
 
-This example requires CLI38 and an already installed Python3. Use two fresh
+This example requires CLI38 and an already installed Python3.9 or newer. Use two fresh
 terminal tabs and close those tabs afterward. It creates only synthetic knowledge
 under a new temporary profile; it never opens your normal library. In terminal A:
 
