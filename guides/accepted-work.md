@@ -93,7 +93,7 @@ this release does not claim native macOS execution qualification.
 
 ## Reproduce a busy sample in a disposable profile
 
-This example requires CLI38 and an already installed Python3.9 or newer. Use two fresh
+This example requires CLI v0.2.38 and an already installed Python3.9 or newer. Use two fresh
 terminal tabs and close those tabs afterward. It creates only synthetic knowledge
 under a new temporary profile; it never opens your normal library. In terminal A:
 
@@ -107,7 +107,7 @@ obsdog search --query quartzneedle --actor-type agent --actor contention-fixture
   --format json > "$repro_root/search.json"
 obsdog space status --format json > "$repro_root/status.json"
 cat > "$repro_root/hold.py" <<'PYTHON'
-import json, os, shlex, sqlite3, sys
+import json, os, shlex, sqlite3, sys, time
 from pathlib import Path
 root = Path(sys.argv[1]).resolve()
 profile = Path(os.environ["OBSDOG_HOME"]).resolve()
@@ -135,8 +135,22 @@ try:
           "--content", "quartzneedle corrected answer.", "--reason", "Synthetic test",
           "--actor-type", "agent", "--actor", "contention-fixture",
           "--format", "json"]), flush=True)
-    input("Press Enter here to release only this synthetic writer: ")
+    (root / "holder-ready.json").write_text(json.dumps({"pid": os.getpid()}))
+    if len(sys.argv) == 3:
+        release = Path(sys.argv[2]).resolve()
+        assert release.parent == root
+        deadline = time.monotonic() + 120
+        while not release.exists():
+            if time.monotonic() >= deadline:
+                raise TimeoutError("Synthetic holder timed out; fixture failed")
+            time.sleep(0.1)
+    else:
+        try:
+            input("Press Enter here to release only this synthetic writer: ")
+        except EOFError:
+            raise SystemExit("Holder lost stdin; fixture failed, do not measure as idle")
 finally:
+    (root / "holder-ready.json").unlink(missing_ok=True)
     connection.rollback()
     connection.close()
 PYTHON
@@ -151,6 +165,67 @@ can remain null. Press Enter in A, then retry only the original failed open or
 recover only the reported correction draft with its original actor. Do not rerun
 accepted siblings or use a new fork. Compare fresh exact content and revisions.
 No production process is stopped, no forced unlock occurs and no cloud mode changes.
+
+## Noninteractive holder and fixture checks
+
+CLI v0.2.39+ is required for the --require-ready exit check below.
+
+Do not measure until the synthetic holder has acquired its lock. Keep the setup
+above through creation of hold.py, then replace its last foreground command with:
+
+```sh
+export repro_root
+python3 - <<'PYTHON'
+import json, os, subprocess, sys, time
+from pathlib import Path
+root = Path(os.environ["repro_root"]).resolve()
+assert Path(os.environ["OBSDOG_HOME"]).resolve() == root / "profile"
+release = root / "release"
+with (root / "holder.out").open("w") as log:
+    holder = subprocess.Popen([sys.executable, str(root / "hold.py"), str(root),
+                               str(release)], stdin=subprocess.DEVNULL,
+                              stdout=log, stderr=subprocess.STDOUT)
+    try:
+        deadline = time.monotonic() + 10
+        while not (root / "holder-ready.json").exists():
+            assert holder.poll() is None, "Holder exited; fixture failed"
+            assert time.monotonic() < deadline, "No acquired signal; fixture failed"
+            time.sleep(0.05)
+        assert json.loads((root / "holder-ready.json").read_text())["pid"] == holder.pid
+        assert holder.poll() is None, "Holder exited; fixture failed"
+        probe = subprocess.run(["obsdog", "space", "write-readiness",
+                                "--require-ready", "--format", "json"],
+                               capture_output=True, text=True, timeout=5)
+        result = json.loads(probe.stdout)
+        assert probe.returncode == 3 and result["data"]["status"] == "busy", result
+        assert result["data"]["ready"] is False and holder.poll() is None, result
+        owner = result["data"].get("writer_owner", {})
+        if owner.get("pid"):
+            assert owner["pid"] == holder.pid, owner
+        print(probe.stdout, end="", flush=True)
+        # Run only the printed synthetic commands from holder.out here.
+        # Repeat the live-child/busy check before each additional measurement.
+    finally:
+        release.touch()
+        holder.wait(timeout=8)
+assert holder.returncode == 0, (root / "holder.out").read_text()
+subprocess.run(["obsdog", "space", "write-readiness", "--require-ready",
+                "--format", "json"], check=True, timeout=5)
+PYTHON
+```
+
+This single controller owns the synthetic subprocess, acquired signal and release. It ignores stdin only when the
+explicit release sentinel is selected, rolls back in finally, and expires after
+120s. Shell teardown may still stop its children: check acquired signal, child
+status and busy result before every measurement. The expected exit3 is checked inside the controller and cannot skip its finally. The controller's finally creates the release file and waits for only this test
+child even when an assertion fails.
+A missing OS lock sample does not prove the fixture was established. Never kill
+an unrelated writer or remove live database files.
+
+The OS interfaces report lock owner and range, not acquisition time. Neither
+process uptime nor repeated samples proves a continuously held transaction.
+Therefore transaction_age_ms may remain null with
+transaction_age_unavailable_reason=os_lock_inventory_has_no_acquisition_time.
 
 ## Inventory and running dashboard
 
@@ -173,3 +248,25 @@ control record, then serves this executable in the foreground. It refuses anothe
 Space or an older listener without supported control. Stop that older viewer in
 its original foreground terminal once, then run `dashboard serve`. Do not kill a
 guessed PID or restart independently owned MCP hosts.
+
+## Reproduce a dashboard warning without taking the live default port
+
+Keep your live listener running. In a new disposable profile, start a previously
+verified older CLI dashboard serve on an unused ephemeral port (--port 0); use
+only the URL printed by that owned synthetic listener. With CLI v0.2.39+:
+
+```sh
+obsdog dashboard status --space SYNTHETIC_SPACE_ID --port PRINTED_PORT   --check-notice --format json
+```
+
+This explicitly invokes the same warning predicate for one selected loopback
+listener and prints the notice on stderr. It does not stop or restart it. The
+listener must identify the same synthetic Space and stable channel and an older
+version. Different Spaces, equal/newer versions or unverifiable health do not
+produce a stale warning. Ordinary command automatic probes still inspect only
+the default port 47777; this controlled check is not a claim that the live
+automatic warning occurred. Changing OBSDOG_HOME alone does not isolate TCP ports.
+End only the test listener in its original foreground/subprocess context.
+
+See [storage and backup](storage-and-backup.md) for freelist interpretation,
+table/index byte attribution and optional private draft preservation.

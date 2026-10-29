@@ -10,7 +10,8 @@ It does **not** contain the proprietary application source code.
 [Feedback privacy guide](FEEDBACK.md) ·
 [AI-client setup](https://github.com/obsdoghq/skills/blob/main/docs/SETUP.md) ·
 [Structural Care and recovery](guides/structural-care.md) ·
-[Local availability and maintenance](guides/local-maintenance.md)
+[Local availability and maintenance](guides/local-maintenance.md) ·
+[Storage and backup](guides/storage-and-backup.md)
 
 Internal implementation is tracked in Project draft tickets, not duplicate Issues
 or TODO checklists. Public issues remain feedback intake. Follow the feedback
@@ -98,6 +99,10 @@ review and approve this formula only; whole-tap trust is unnecessary.
 
 ### Standalone installer
 
+v0.2.39 [makes readiness, storage and backup coverage explicit](releases/v0.2.39.md).
+Read the [storage and backup guide](guides/storage-and-backup.md) for physical
+measurements, compressed bytes and optional private draft preservation.
+
 v0.2.38 [makes accepted work and correction recovery explicit](releases/v0.2.38.md).
 Read, mutation, search observation and Care receipt outcomes are independent.
 A failed correction retains private local intent and reports target-only retry
@@ -151,8 +156,8 @@ Download the installer and checksum manifest from the same immutable release,
 inspect them, then install:
 
 ```sh
-curl -fL --proto '=https' -o obsdog-install.sh https://github.com/obsdoghq/obsdog-releases/releases/download/v0.2.38/install.sh
-curl -fL --proto '=https' -o obsdog-checksums.txt https://github.com/obsdoghq/obsdog-releases/releases/download/v0.2.38/checksums.txt
+curl -fL --proto '=https' -o obsdog-install.sh https://github.com/obsdoghq/obsdog-releases/releases/download/v0.2.39/install.sh
+curl -fL --proto '=https' -o obsdog-checksums.txt https://github.com/obsdoghq/obsdog-releases/releases/download/v0.2.39/checksums.txt
 if command -v sha256sum >/dev/null 2>&1; then
   sha256sum obsdog-install.sh
 else
