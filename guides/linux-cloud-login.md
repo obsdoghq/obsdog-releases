@@ -20,27 +20,78 @@ private key file or trusted secret-manager environment injection. ObsDog does
 not generate, print, copy or migrate the key. Do not put its value in command
 arguments, shell history, `.env`, source control, agent prompts or support reports.
 
-## Connect an exact Space
+## Connect your account, then authorize Spaces
 
-Copy the exact Personal Space ID from `app.obsdog.ai/account`. If that ID is not
-present locally, `space prepare --id` creates an empty local candidate; it does
-not sign in, select a new default, rebind existing knowledge or upload anything.
-Pass the chosen ID explicitly. The examples below contain placeholder IDs and
-a non-secret path to a key that your operator has already provisioned:
+CLI v0.2.42 connects a device to your account without copying a Space ID first.
+Keep your existing credential backend and key configuration. The example key
+path below is a placeholder for a key your operator has already provisioned:
 
 ```sh
 obsdog version
-obsdog space prepare --id spc_from_account
 export OBSDOG_CREDENTIAL_STORE=encrypted-file
 export OBSDOG_CREDENTIAL_KEY_FILE=/run/user/1000/secrets/obsdog-credential-key
-obsdog auth login --space spc_from_account --server https://api.obsdog.ai --no-browser
+obsdog auth login --server https://api.obsdog.ai --no-browser
 obsdog auth status --server https://api.obsdog.ai
 ```
 
-Open the printed verification URL in your browser, sign in and approve the
-named device and exact Space. The CLI never asks for a provider password or
-prints access/refresh tokens. Login alone does not upload your local library.
-Keep the same credential configuration for explicitly requested sync and logout.
+Open the exact verification URL printed by this command. The new account flow
+uses `https://app.obsdog.ai/device/v3`; old explicit-Space login uses a different
+page. Sign in, review the account and requesting device, and approve either
+account connection only or one eligible Space. Account connection alone grants
+no knowledge access. The displayed hyphen is accepted; it is not an expiry fix.
+Never approve a code you did not just request.
+
+Add another Space to the same connection with:
+
+```sh
+obsdog auth grant --server https://api.obsdog.ai --no-browser
+obsdog auth status --server https://api.obsdog.ai
+```
+
+Choose and approve that exact Space in the browser. Switching among approved
+Spaces does not require another account pairing. Login and grant do not upload
+knowledge, start sync, or change your default local Space.
+
+To explicitly download an approved Space, replace `SPACE_ID` below with its exact
+ID shown by `auth status`. If it already exists locally, inspect it and preserve
+pending edits. If absent, `space prepare` creates an empty candidate with that
+identity. Never relabel an unrelated existing library to make it match.
+
+```sh
+obsdog space prepare --id SPACE_ID
+obsdog sync connect --space SPACE_ID --server https://api.obsdog.ai
+obsdog --timeout 180s sync pull --space SPACE_ID --server https://api.obsdog.ai
+```
+
+First pull is separate from successful login. For `activity_detail_expired`,
+`client_upgrade_required` or `snapshot_required`, preserve the local profile and
+follow [full-history recovery](history-retention.md). Re-pairing does not rebuild
+a server checkpoint. Do not delete a library, force a cursor or upload an empty
+replacement to bypass recovery.
+
+## Select and disconnect accounts
+
+```sh
+obsdog auth accounts --server https://api.obsdog.ai
+obsdog auth login --add-account --server https://api.obsdog.ai --no-browser
+obsdog auth use --account ACCOUNT_ID --server https://api.obsdog.ai
+obsdog auth revoke-space --space SPACE_ID --server https://api.obsdog.ai
+obsdog auth logout --server https://api.obsdog.ai
+```
+
+`auth use` selects an already connected account. `revoke-space` removes only that
+Space grant; `logout` revokes the selected account's device connection and all
+its grants. Neither deletes local knowledge. Website sign-out is separate from
+CLI disconnection. A failed or uncertain revocation keeps the local credential
+so you can inspect and retry deliberately.
+
+Existing explicit `auth login --space SPACE_ID` remains a legacy exact-Space
+flow. It preserves its old credential records and must not be combined with
+`--account` or `--add-account`. Once account connections exist, sync uses the
+selected account and never silently falls back to another account or old token.
+The hosted MCP plugin has its own connection; CLI pairing does not reconnect it.
+
+## Credential file requirements
 
 The key file must be absolute, owned by your effective user, regular, single-link
 and mode `0400` or `0600`, with no symlink path components. One final LF or CRLF
@@ -75,8 +126,9 @@ key and approve a fresh login into a new empty credential directory.
 Encrypted temporary records are atomically replaced. A failure before rename
 preserves the old record; a failure after rename may leave the complete new
 record with durability unconfirmed. Stop and inspect status with the same key;
-do not blindly restore an older rotating refresh-token backup. Serialize hosted
-commands that share one credential directory to avoid refresh-token races.
+do not blindly restore an older rotating refresh-token backup. The account flow coordinates refresh and local record updates across processes.
+After an interrupted operation, inspect status using the same configuration;
+never delete the index or restore an old token to force a retry.
 
 ## What encryption does not protect
 

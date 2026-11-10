@@ -99,6 +99,10 @@ review and approve this formula only; whole-tap trust is unnecessary.
 
 ### Standalone installer
 
+v0.2.42 connects your account first and authorizes each Space separately.
+See the [headless cloud login and recovery guide](guides/linux-cloud-login.md).
+Login alone does not synchronize or change your local knowledge.
+
 v0.2.41 [repairs full-history download for larger retained histories](releases/v0.2.41.md).
 
 v0.2.40 [aligns search activity counts and result stages](releases/v0.2.40.md).
@@ -162,8 +166,8 @@ Download the installer and checksum manifest from the same immutable release,
 inspect them, then install:
 
 ```sh
-curl -fL --proto '=https' -o obsdog-install.sh https://github.com/obsdoghq/obsdog-releases/releases/download/v0.2.41/install.sh
-curl -fL --proto '=https' -o obsdog-checksums.txt https://github.com/obsdoghq/obsdog-releases/releases/download/v0.2.41/checksums.txt
+curl -fL --proto '=https' -o obsdog-install.sh https://github.com/obsdoghq/obsdog-releases/releases/download/v0.2.42/install.sh
+curl -fL --proto '=https' -o obsdog-checksums.txt https://github.com/obsdoghq/obsdog-releases/releases/download/v0.2.42/checksums.txt
 if command -v sha256sum >/dev/null 2>&1; then
   sha256sum obsdog-install.sh
 else
