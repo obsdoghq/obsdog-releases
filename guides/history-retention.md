@@ -92,3 +92,19 @@ update cannot resurrect details expired by the current verified policy.
 A legacy base revision may refer to an unavailable ancestor. History preserves
 that original ID and reports the boundary. Affected documents stay protected
 until their complete history can be verified; recovery never invents a parent.
+
+## First download errors
+
+Use v0.2.41 or later when a retained history requires the extended layout profile.
+`client_upgrade_required` asks for a compatible client; it does not request a new
+Space or a new login. The download restores complete history before later changes.
+
+`activity_detail_expired` means the server's saved checkpoint needs maintenance.
+An older CLI may label the same failure `410 snapshot_required`. Keep your
+existing profile and offline drafts, update the CLI, and retry after the server
+has recovered. Re-pairing, clearing a cursor, or replacing history with only the
+current documents does not fix this condition.
+
+Complete checkpoint requests have a180-second default allowance. Your explicit
+`--timeout` still bounds the command and may need to cover download plus local
+restoration. A network timeout alone does not mean your account connection expired.

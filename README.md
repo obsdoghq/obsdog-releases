@@ -99,6 +99,8 @@ review and approve this formula only; whole-tap trust is unnecessary.
 
 ### Standalone installer
 
+v0.2.41 [repairs full-history download for larger retained histories](releases/v0.2.41.md).
+
 v0.2.40 [aligns search activity counts and result stages](releases/v0.2.40.md).
 Other recorded declarations remain visible as uncounted; missing eligibility
 evidence stays unknown. Restart your dashboard after upgrading.
@@ -160,8 +162,8 @@ Download the installer and checksum manifest from the same immutable release,
 inspect them, then install:
 
 ```sh
-curl -fL --proto '=https' -o obsdog-install.sh https://github.com/obsdoghq/obsdog-releases/releases/download/v0.2.40/install.sh
-curl -fL --proto '=https' -o obsdog-checksums.txt https://github.com/obsdoghq/obsdog-releases/releases/download/v0.2.40/checksums.txt
+curl -fL --proto '=https' -o obsdog-install.sh https://github.com/obsdoghq/obsdog-releases/releases/download/v0.2.41/install.sh
+curl -fL --proto '=https' -o obsdog-checksums.txt https://github.com/obsdoghq/obsdog-releases/releases/download/v0.2.41/checksums.txt
 if command -v sha256sum >/dev/null 2>&1; then
   sha256sum obsdog-install.sh
 else
