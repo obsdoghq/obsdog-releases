@@ -95,7 +95,7 @@ until their complete history can be verified; recovery never invents a parent.
 
 ## First download errors
 
-Use v0.2.41 or later when a retained history requires the extended layout profile.
+Use v0.2.43 or later for the latest retained-history restoration fixes.
 `client_upgrade_required` asks for a compatible client; it does not request a new
 Space or a new login. The download restores complete history before later changes.
 
@@ -108,3 +108,9 @@ current documents does not fix this condition.
 Complete checkpoint requests have a180-second default allowance. Your explicit
 `--timeout` still bounds the command and may need to cover download plus local
 restoration. A network timeout alone does not mean your account connection expired.
+
+`UNIQUE constraint failed: blocks.document_id, blocks.ordinal` during history
+restoration is a local block-ordering defect fixed in v0.2.43. Update the CLI and
+retry the same pull. A failed transaction rolls back; keep the existing Space,
+connection and any local work. Re-pairing or resetting the local database is not
+part of this recovery.
